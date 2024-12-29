@@ -1,52 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Pandemic Dashboard</title>
   <style>
     :root {
-      --residential-color: #4CAF50;
-      --hospital-color: #ffffff;
+      --safe-color: #4CAF50;
+      --low-risk-color: #FFD700;
+      --medium-risk-color: #FFA500;
+      --high-risk-color: #f44336;
+      --hospital-color: #FFFFFF;
       --lab-color: #FFD700;
-      --infected-color: #f44336;
       --grid-size: 64;
+      --background-color: #0e1117;
+      --panel-color: #161b22;
+      --text-color: #c9d1d9;
+      --accent-color: #238636;
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --glow-color: rgba(35, 134, 54, 0.5); /* Neon glow effect */
+      --shadow-color: rgba(0, 0, 0, 0.5);
     }
-    
+
     body {
-      font-family: system, -apple-system, sans-serif;
+      font-family: var(--font-family);
       margin: 0;
-      padding: 20px;
-      background: #1a1a1a;
-      color: white;
+      padding: 0;
+      background: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden; /* Prevent scrollbars */
     }
-    
+
     .dashboard {
       display: grid;
-      grid-template-columns: 300px 1fr;
-      grid-template-rows: 80px 1fr 120px;
-      gap: 20px;
-      height: 95vh;
+      grid-template-columns: minmax(280px, 15%) 1fr;
+      grid-template-rows: 80px 1fr minmax(100px, auto);
+      gap: 25px;
+      width: 95%;
+      max-width: 1600px;
+      height: 90vh;
+      padding: 20px;
+      box-shadow: 0 4px 8px var(--shadow-color);
+      border-radius: 15px;
+      background: var(--background-color);
     }
 
     /* Header Styles */
     .header {
       grid-column: 1 / -1;
-      background: #333;
-      padding: 15px;
-      border-radius: 8px;
+      background: var(--panel-color);
+      padding: 15px 25px;
+      border-radius: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     .day {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
-      color: #4CAF50;
+      color: var(--accent-color);
       animation: pulse 2s infinite;
+      text-shadow: 0 0 5px var(--accent-color);
     }
 
     .stats {
       display: flex;
-      gap: 40px;
+      gap: 30px;
     }
 
     .stat {
@@ -54,34 +77,68 @@
     }
 
     .stat-value {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
       transition: color 0.3s;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #99a3b1;
+      text-transform: uppercase;
+      font-size: 13px;
     }
 
     /* Sidebar Styles */
     .sidebar {
-      background: #333;
+      background: var(--panel-color);
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
-    .resources, .personnel {
-      background: #404040;
+    .resources,
+    .counter-measures {
+      background: #1f252e;
       padding: 15px;
-      border-radius: 6px;
+      border-radius: 8px;
+    }
+
+    .resources h3,
+    .counter-measures h3 {
+      margin-top: 0;
+      color: var(--accent-color);
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .resource-item,
+    .counter-measure-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .resource-item span:nth-child(2),
+    .counter-measure-item span:nth-child(2) {
+      font-weight: 600;
     }
 
     /* Map Styles */
     .map-container {
       position: relative;
-      background: #333;
-      border-radius: 8px;
+      background: #1f252e;
+      border-radius: 10px;
       padding: 20px;
       overflow: hidden;
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     .map {
@@ -89,34 +146,71 @@
       grid-template-columns: repeat(var(--grid-size), 1fr);
       gap: 1px;
       aspect-ratio: 1;
-      background: #222;
+      background: #161b22;
+      border: 2px solid #373e47;
     }
 
     .cell {
-      aspect-ratio: 1;
-      position: relative;
-      transition: all 0.3s;
-      border: 1px solid rgba(255,255,255,0.1);
+        aspect-ratio: 1;
+        position: relative;
+        transition: all 0.5s ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-clip: padding-box;
+        cursor: pointer;
     }
 
     .cell.residential {
-      background: var(--residential-color);
+        background: var(--safe-color);
+        box-shadow: 0 0 5px var(--safe-color);
     }
 
-    .cell.residential::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        rgba(255,255,255,0.1),
-        rgba(255,255,255,0.1) 2px,
-        transparent 2px,
-        transparent 4px
-      );
+    .cell.residential.low-risk {
+        background: var(--low-risk-color);
+        box-shadow: 0 0 5px var(--low-risk-color);
+    }
+
+    .cell.residential.medium-risk {
+        background: var(--medium-risk-color);
+        box-shadow: 0 0 5px var(--medium-risk-color);
+    }
+
+    .cell.residential.high-risk {
+        background: var(--high-risk-color);
+        box-shadow: 0 0 5px var(--high-risk-color);
+    }
+    .cell.residential.high-risk:hover {
+      transform: scale(1.1);
+      z-index: 2;
+    }
+
+    .cell::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        transition: opacity 0.5s ease-in-out;
+        opacity: 0;
+    }
+    
+    .cell.residential.high-risk::before {
+        opacity: 1;
+        background: radial-gradient(circle at center, rgba(255, 0, 0, 0.5) 0%, transparent 70%);
+        animation: pulse-red 2s infinite;
+    }
+
+    .cell.residential.medium-risk::before {
+        opacity: 0.7;
+        background: radial-gradient(circle at center, rgba(255, 165, 0, 0.5) 0%, transparent 70%);
+        animation: pulse-orange 2s infinite;
+    }
+
+    .cell.residential.low-risk::before {
+        opacity: 0.5;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.5) 0%, transparent 70%);
+        animation: pulse-yellow 2s infinite;
     }
 
     .cell.hospital {
@@ -124,11 +218,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      box-shadow: 0 0 8px var(--hospital-color);
+      z-index: 3;
     }
 
     .cell.hospital::after {
       content: '🏥';
-      font-size: 8px;
+      font-size: 10px;
     }
 
     .cell.lab {
@@ -136,40 +232,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      box-shadow: 0 0 8px var(--lab-color);
+      z-index: 3;
     }
 
     .cell.lab::after {
       content: '🔬';
-      font-size: 8px;
-    }
-
-    .cell.infected {
-      position: relative;
-    }
-
-    .cell.infected::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--infected-color);
-      opacity: 0.6;
-      animation: spread 2s infinite;
-    }
-
-    .cell.spreading::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, var(--infected-color) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      animation: virusSpread 3s infinite;
+      font-size: 10px;
     }
 
     .cell.quarantine::after {
@@ -181,23 +250,25 @@
       bottom: 0;
       background: repeating-linear-gradient(
         45deg,
-        rgba(0,0,0,0.3),
-        rgba(0,0,0,0.3) 5px,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.3) 5px,
         transparent 5px,
         transparent 10px
       );
       animation: moveStripes 20s linear infinite;
+      z-index: 4;
     }
 
     /* Control Panel */
     .control-panel {
       grid-column: 1 / -1;
-      background: #333;
-      padding: 15px;
-      border-radius: 8px;
+      background: var(--panel-color);
+      padding: 15px 25px;
+      border-radius: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     .build-options {
@@ -206,109 +277,252 @@
     }
 
     .build-button {
-      padding: 8px 15px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 4px;
-      background: #4a4a4a;
+      border-radius: 6px;
+      background: var(--accent-color);
       color: white;
       cursor: pointer;
       transition: all 0.3s;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
+      font-weight: 500;
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     .build-button:hover {
-      background: #5a5a5a;
-      transform: translateY(-2px);
+      background: #1f682e;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      transform: translateY(-1px);
     }
 
     .build-button.hospital {
-      border-left: 4px solid var(--hospital-color);
+      background: #1a73e8;
     }
 
     .build-button.lab {
-      border-left: 4px solid var(--lab-color);
+      background: #ffbf00;
+    }
+
+    .build-button span {
+      font-size: 12px;
+      color: #b8b8b8;
+      margin-left: 8px;
+      font-weight: 400;
     }
 
     /* Animations */
-    @keyframes spread {
-      0% { opacity: 0.6; }
-      50% { opacity: 0.8; }
-      100% { opacity: 0.6; }
-    }
-
-    @keyframes virusSpread {
-      0% { 
-        opacity: 0.4;
-        width: 100%;
-        height: 100%;
-      }
-      100% { 
-        opacity: 0;
-        width: 300%;
-        height: 300%;
-      }
-    }
-
     @keyframes moveStripes {
-      0% { background-position: 0 0; }
-      100% { background-position: 50px 50px; }
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 50px 50px;
+      }
     }
 
     @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.7; }
-      100% { opacity: 1; }
+      0% {
+        opacity: 0.8;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      100% {
+        opacity: 0.8;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse-red {
+      0% {
+        opacity: 0.5;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.5;
+      }
+    }
+    @keyframes pulse-orange {
+      0% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.7;
+      }
+      100% {
+        opacity: 0.3;
+      }
+    }
+    @keyframes pulse-yellow {
+      0% {
+        opacity: 0.2;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        opacity: 0.2;
+      }
     }
 
     /* Virus Mutation Alert */
     .virus-alert {
       position: absolute;
-      top: 20px;
+      top: 25px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(244, 67, 54, 0.9);
-      padding: 10px 20px;
-      border-radius: 4px;
+      background: rgba(244, 67, 54, 0.95);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       animation: fadeInOut 4s forwards;
+      z-index: 10;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      font-size: 15px;
     }
 
     .virus-alert::before {
       content: '⚠️';
+      font-size: 18px;
     }
 
     @keyframes fadeInOut {
-      0% { opacity: 0; transform: translate(-50%, -20px); }
-      10% { opacity: 1; transform: translate(-50%, 0); }
-      90% { opacity: 1; transform: translate(-50%, 0); }
-      100% { opacity: 0; transform: translate(-50%, -20px); }
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
+      10% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      90% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
     }
+
+    /* Tooltip Styles */
+    .tooltip {
+      position: absolute;
+      background: var(--panel-color);
+      color: var(--text-color);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10;
+      pointer-events: none; /* Prevent the tooltip from blocking cell clicks */
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      font-size: 14px;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .cell:hover .tooltip {
+      opacity: 1;
+    }
+    
+    /* Notifications */
+    .notifications {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .notification {
+      background: var(--panel-color);
+      color: var(--text-color);
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: slideIn 0.5s forwards;
+    }
+    
+    .notification.new-case {
+      background: #f44336;
+    }
+    
+    .notification.recovered {
+      background: #4CAF50;
+    }
+    
+    .notification.death {
+      background: #777;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .notification::before {
+      font-size: 16px;
+    }
+    
+    .notification.new-case::before {
+      content: '🔴';
+    }
+    
+    .notification.recovered::before {
+      content: '🟢';
+    }
+    
+    .notification.death::before {
+      content: '⚫';
+    }
+
   </style>
 </head>
 <body>
   <div class="dashboard">
     <header class="header">
-      <div class="day">Ngày: 127</div>
+      <div class="day">Ngày: 1</div>
       <div class="stats">
         <div class="stat">
-          <div class="stat-value" style="color: #f44336;">1,205</div>
-          <div class="stat-label">Ca nhiễm</div>
+          <div class="stat-value" id="total-cases" style="color: #f44336;">0</div>
+          <div class="stat-label">Tổng Ca Nhiễm</div>
         </div>
         <div class="stat">
-          <div class="stat-value" style="color: #FFD700;">523</div>
-          <div class="stat-label">Đang điều trị</div>
+          <div class="stat-value" id="new-cases" style="color: #f44336;">0</div>
+          <div class="stat-label">Ca Nhiễm Mới</div>
         </div>
         <div class="stat">
-          <div class="stat-value" style="color: #f44336;">48</div>
-          <div class="stat-label">Tử vong</div>
+          <div class="stat-value" id="death-rate" style="color: #f44336;">0%</div>
+          <div class="stat-label">Tỷ Lệ Tử Vong</div>
         </div>
         <div class="stat">
-          <div class="stat-value" style="color: #4CAF50;">634</div>
-          <div class="stat-label">Đã khỏi</div>
+          <div class="stat-value" id="recovered-cases" style="color: #4CAF50;">0</div>
+          <div class="stat-label">Ca Hồi Phục</div>
         </div>
       </div>
     </header>
@@ -317,107 +531,50 @@
       <div class="resources">
         <h3>Tài Nguyên</h3>
         <div class="resource-item">
-          <span>Điểm nghiên cứu (RP)</span>
-          <span>450</span>
+          <span>Coin</span>
+          <span id="coin-count">5000</span>
         </div>
         <div class="resource-item">
-          <span>Vật tư y tế</span>
-          <span>230</span>
-        </div>
-        <div class="resource-item">
-          <span>Vaccine</span>
-          <span>100</span>
-        </div>
-        <div class="resource-item">
-          <span>Ngân sách</span>
-          <span>$5000</span>
+          <span>Vật tư</span>
+          <span id="supply-count">100</span>
         </div>
       </div>
 
-      <div class="personnel">
-        <h3>Nhân Lực</h3>
-        <div class="personnel-item">
-          <span>Bác sĩ rảnh</span>
-          <span>3</span>
+      <div class="counter-measures">
+        <h3>Biện Pháp Chống Dịch</h3>
+        <div class="counter-measure-item">
+          <span>Bệnh viện đã xây</span>
+          <span id="hospitals-built">0</span>
         </div>
-        <div class="personnel-item">
-          <span>Đang nghiên cứu</span>
-          <span>4</span>
+        <div class="counter-measure-item">
+          <span>Phòng lab đã xây</span>
+          <span id="labs-built">0</span>
         </div>
-        <div class="personnel-item">
-          <span>Đang điều trị</span>
-          <span>2</span>
+        <div class="counter-measure-item">
+          <span>Biện pháp đã áp dụng</span>
+          <span id="measures-taken">0</span>
         </div>
       </div>
     </aside>
 
     <div class="map-container">
-      <div class="virus-alert">Phát hiện đột biến virus! Độc lực tăng 15%</div>
+      <div class="notifications" id="notifications-container">
+      </div>
+      <div class="virus-alert"></div>
       <div class="map">
-        <script>
-          const map = document.querySelector('.map');
-          const gridSize = 64;
-          
-          // Tạo grid cells
-          for(let i = 0; i < gridSize * gridSize; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'cell residential';
-            
-            // Random initial state
-            if(Math.random() < 0.01) {
-              cell.className = 'cell hospital';
-            } else if(Math.random() < 0.01) {
-              cell.className = 'cell lab';
-            } else if(Math.random() < 0.05) {
-              cell.classList.add('infected');
-              if(Math.random() < 0.3) {
-                cell.classList.add('spreading');
-              }
-            } else if(Math.random() < 0.03) {
-              cell.classList.add('quarantine');
-            }
-            
-            map.appendChild(cell);
-          }
-
-          // Simulate virus spread
-          setInterval(() => {
-            const cells = document.querySelectorAll('.cell');
-            cells.forEach(cell => {
-              if(cell.classList.contains('infected') && Math.random() < 0.3) {
-                // Randomly spread to adjacent cells
-                const nearby = [
-                  cells[Array.from(cells).indexOf(cell) - 64],  // top
-                  cells[Array.from(cells).indexOf(cell) + 64],  // bottom
-                  cells[Array.from(cells).indexOf(cell) - 1],   // left
-                  cells[Array.from(cells).indexOf(cell) + 1]    // right
-                ];
-                
-                nearby.forEach(nearCell => {
-                  if(nearCell && !nearCell.classList.contains('hospital') && 
-                     !nearCell.classList.contains('lab') && Math.random() < 0.1) {
-                    nearCell.classList.add('infected');
-                    setTimeout(() => {
-                      nearCell.classList.add('spreading');
-                    }, Math.random() * 1000);
-                  }
-                });
-              }
-            });
-          }, 2000);
-        </script>
+        <!-- Map cells will be generated here -->
       </div>
     </div>
 
     <div class="control-panel">
       <div class="build-options">
-        <button class="build-button hospital">
+        <button class="build-button hospital" onclick="buildHospital()">
           🏥 Xây Bệnh Viện
-          <span style="font-size: 12px; color: #aaa;">($2000)</span>
+          <span id="hospital-cost">($2000)</span>
         </button>
-        <button class="build-button lab">
+        <button class="build-button lab" onclick="buildLab()">
           🔬 Xây Phòng Lab
-          <span style="font-size: 12px; color: #aaa;">($2500)</span>
+          <span id="lab-cost">($2500)</span>
         </button>
       </div>
       <div class="action-buttons">
@@ -427,14 +584,241 @@
   </div>
 
   <script>
+    const map = document.querySelector('.map');
+    const gridSize = 64;
+    let totalCases = 0;
+    let newCases = 0;
+    let recovered = 0;
+    let deaths = 0;
+    let day = 1;
+    let hospitalsBuilt = 0;
+    let labsBuilt = 0;
+    let measuresTaken = 0;
+    let coinCount = 5000;
+    let supplyCount = 100;
+    const hospitalCost = 2000;
+    const labCost = 2500;
+
+    // Initialize city data
+    let city = [];
+
+    // Create grid cells
+    function initializeMap() {
+        map.innerHTML = ''; // Clear existing cells
+      for (let i = 0; i < gridSize * gridSize; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell residential';
+        cell.id = `cell-${i}`;
+        
+        // Add tooltip div
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        cell.appendChild(tooltip);
+        
+        cell.addEventListener('mouseover', () => showTooltip(i));
+        cell.addEventListener('mouseout', hideTooltip);
+
+        const cellData = {
+            type: 'residential',
+            infected: 0,
+            immune: 0,
+            population: 100 // Example population
+        };
+
+        if (Math.random() < 0.01) {
+          cell.className = 'cell hospital';
+          cellData.type = 'hospital';
+          hospitalsBuilt++;
+        } else if (Math.random() < 0.01) {
+          cell.className = 'cell lab';
+          cellData.type = 'lab';
+          labsBuilt++;
+        } else if (Math.random() < 0.05) {
+            cellData.infected = Math.floor(Math.random() * cellData.population); // Initial infected
+            totalCases += cellData.infected;
+            newCases += cellData.infected;
+            updateCellColor(cell, cellData.infected / cellData.population);
+        }
+
+        city.push(cellData);
+        map.appendChild(cell);
+      }
+      updateDashboard();
+    }
+    
+    function updateCellColor(cell, infectionRate) {
+        cell.classList.remove('low-risk', 'medium-risk', 'high-risk');
+        if (infectionRate > 0.5) {
+          cell.classList.add('high-risk');
+        } else if (infectionRate > 0.2) {
+          cell.classList.add('medium-risk');
+        } else if (infectionRate > 0) {
+          cell.classList.add('low-risk');
+        }
+      }
+      
+
+    // Simulate virus spread
+    function simulateSpread() {
+        day++;
+        let currentNewCases = 0;
+        let currentRecovered = 0;
+        let currentDeaths = 0;
+
+        for (let i = 0; i < city.length; i++) {
+            let cell = document.getElementById(`cell-${i}`);
+          if (city[i].type === 'residential') {
+            let infectedBefore = city[i].infected;
+            // Basic spread model
+            if(city[i].infected > 0){
+              const adjacentCells = getAdjacentCells(i);
+              adjacentCells.forEach(adjIndex => {
+                if(city[adjIndex].type === 'residential' && city[adjIndex].infected < city[adjIndex].population){
+                  let transfer = Math.floor(city[i].infected * 0.1); // 10% of infected can spread to adjacent cell
+                  transfer = Math.min(transfer, city[adjIndex].population - city[adjIndex].infected);
+                  city[adjIndex].infected += transfer;
+                  currentNewCases += transfer;
+                  
+                  if(transfer > 0) addNotification('new-case', `+${transfer} Ca Nhiễm Mới ở ô ${adjIndex}`);
+                }
+              });
+            }
+
+            // Mortality and recovery (simplified model)
+            let recoveredToday = Math.floor(city[i].infected * 0.05); // 5% recovery rate
+            let deathsToday = Math.floor(city[i].infected * 0.01); // 1% death rate
+
+            city[i].infected -= (recoveredToday + deathsToday);
+            city[i].immune += recoveredToday;
+
+            currentRecovered += recoveredToday;
+            currentDeaths += deathsToday;
+            
+            if(recoveredToday > 0) addNotification('recovered', `+${recoveredToday} Ca Hồi Phục ở ô ${i}`);
+            if(deathsToday > 0) addNotification('death', `-${deathsToday} Ca Tử Vong ở ô ${i}`);
+
+            let infectionRate = city[i].infected / city[i].population;
+            
+            updateCellColor(cell, infectionRate);
+
+            // Update total stats
+            totalCases += (city[i].infected - infectedBefore); // Update if infection increased
+          }
+        }
+        newCases = currentNewCases
+        deaths += currentDeaths;
+        recovered += currentRecovered;
+
+        updateDashboard();
+        
+        // Update day counter
+        document.querySelector('.day').innerText = 'Ngày: ' + day;
+      }
+
+      function getAdjacentCells(index) {
+        const adjacent = [];
+        const row = Math.floor(index / gridSize);
+        const col = index % gridSize;
+
+        // Top
+        if (row > 0) adjacent.push(index - gridSize);
+        // Bottom
+        if (row < gridSize - 1) adjacent.push(index + gridSize);
+        // Left
+        if (col > 0) adjacent.push(index - 1);
+        // Right
+        if (col < gridSize - 1) adjacent.push(index + 1);
+
+        return adjacent;
+      }
+
+    // Update dashboard information
+    function updateDashboard() {
+      document.getElementById('total-cases').innerText = totalCases;
+      document.getElementById('new-cases').innerText = newCases;
+      document.getElementById('death-rate').innerText = deaths === 0 ? "0%" : ((deaths / (deaths + recovered)) * 100).toFixed(2) + "%";
+      document.getElementById('recovered-cases').innerText = recovered;
+      document.getElementById('hospitals-built').innerText = hospitalsBuilt;
+      document.getElementById('labs-built').innerText = labsBuilt;
+
+      // Example resource update
+      document.getElementById('coin-count').innerText = coinCount; // Example increment
+      document.getElementById('supply-count').innerText = supplyCount; // Example decrement
+    }
+
     // Simulate virus mutation alerts
-    setInterval(() => {
+    function triggerVirusAlert(message) {
       const alert = document.querySelector('.virus-alert');
+      alert.innerText = message;
       alert.style.display = 'none';
       setTimeout(() => {
         alert.style.display = 'flex';
       }, 100);
-    }, 20000);
+    }
+
+    function showTooltip(cellIndex) {
+        const cellData = city[cellIndex];
+        const tooltip = document.getElementById(`cell-${cellIndex}`).querySelector('.tooltip');
+        tooltip.innerHTML = `
+          Loại: ${cellData.type === 'residential' ? 'Khu dân cư' : cellData.type === 'hospital' ? 'Bệnh viện' : 'Phòng thí nghiệm'}<br>
+          Dân số: ${cellData.population}<br>
+          Ca nhiễm: ${cellData.infected}<br>
+          Miễn dịch: ${cellData.immune}<br>
+          Tỉ lệ lây nhiễm: ${(cellData.infected / cellData.population * 100).toFixed(2)}%
+        `;
+        tooltip.style.opacity = 1;
+    }
+
+    function hideTooltip(event) {
+        const tooltip = event.target.querySelector('.tooltip');
+        if (tooltip) {
+          tooltip.style.opacity = 0;
+        }
+    }
+    
+    function addNotification(type, message) {
+      const notificationsContainer = document.getElementById('notifications-container');
+      const notification = document.createElement('div');
+      notification.classList.add('notification', type);
+      notification.innerText = message;
+      notificationsContainer.appendChild(notification);
+    
+      // Automatically remove the notification after a few seconds
+      setTimeout(() => {
+        notificationsContainer.removeChild(notification);
+      }, 5000);
+    }
+
+    function buildHospital() {
+      if (coinCount >= hospitalCost) {
+        coinCount -= hospitalCost;
+        hospitalsBuilt++;
+        measuresTaken++;
+        updateDashboard();
+        // Implement logic to choose a cell and convert it to a hospital
+        // For example, you can highlight available cells and let the user click on one
+      } else {
+        alert("Not enough coins!");
+      }
+    }
+
+    function buildLab() {
+      if (coinCount >= labCost) {
+        coinCount -= labCost;
+        labsBuilt++;
+        measuresTaken++;
+        updateDashboard();
+        // Implement logic to choose a cell and convert it to a lab
+      } else {
+        alert("Not enough coins!");
+      }
+    }
+    // Initialize the map and start the simulation
+    initializeMap();
+    setInterval(simulateSpread, 2000); // Run simulation every 2 seconds
+    setInterval(() => {
+      triggerVirusAlert("Phát hiện đột biến virus!");
+    }, 20000); // Trigger alert every 20 seconds
   </script>
 </body>
 </html>

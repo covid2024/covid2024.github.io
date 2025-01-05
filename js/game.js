@@ -212,8 +212,43 @@ const game = {
         if (!isNaN(vaccineRate) && vaccineRate >= 0 && vaccineRate <= 100) {
             this.vaccineSuccessRate = vaccineRate;
             alert(`Vaccine đã được áp dụng với mức độ thành công ${vaccineRate}%`);
+
+            // Áp dụng hiệu ứng vaccine ngay lập tức
+            this.simulateVaccineEffects();
+            this.updateDashboard(); // Cập nhật dashboard ngay lập tức
         } else {
             alert('Vui lòng nhập mức độ thành công của vaccine từ 0% đến 100%');
+        }
+    },
+
+    // Hàm mô phỏng hiệu ứng của vaccine
+    simulateVaccineEffects() {
+        for (let i = 0; i < this.city.length; i++) {
+            if (this.city[i].type === 'residential' && this.city[i].infected > 0) {
+                // Tính toán số ca hồi phục và tử vong dựa trên vaccine
+                let recoveredToday = Math.floor(this.city[i].infected * (this.vaccineSuccessRate / 100));
+                let deathsToday = Math.floor(this.city[i].infected * (config.deathRate * (1 - this.vaccineSuccessRate / 100)));
+
+                // Đảm bảo số ca hồi phục không vượt quá số ca nhiễm
+                recoveredToday = Math.min(recoveredToday, this.city[i].infected);
+
+                this.city[i].infected -= (recoveredToday + deathsToday);
+                this.city[i].immune += recoveredToday;
+                this.city[i].infected = Math.max(0, this.city[i].infected);
+
+                this.recovered += recoveredToday;
+                this.deaths += deathsToday;
+
+                if (recoveredToday > 0) {
+                    utils.addNotification('recovered', `+${recoveredToday} Ca Hồi Phục ở ô ${i} (Vaccine)`);
+                }
+                if (deathsToday > 0) {
+                    utils.addNotification('death', `-${deathsToday} Ca Tử Vong ở ô ${i} (Vaccine)`);
+                }
+
+                // Cập nhật màu sắc của ô
+                this.updateCellVisuals(i, this.city);
+            }
         }
     },
 

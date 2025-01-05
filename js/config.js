@@ -2,9 +2,9 @@
 const config = {
   gridRows: 14,
   gridCols: 14,
-  hospitalCost: 400, // Giảm từ 2000 xuống 200
-  labCost: 450, // Giảm từ 2500 xuống 200
-  dayDuration: 0.5 * 60 * 1000,
+  hospitalCost: 200, // Giảm từ 2000 xuống 200
+  labCost: 200, // Giảm từ 2500 xuống 200
+  dayDuration: 0.1 * 60 * 1000,
   initialMutationIn: [10, 15],
   mutationInterval: [5, 10],
   researchRate: 0.05,
@@ -26,6 +26,6 @@ const config = {
   defaultTemperature: 27,
   defaultMovementRate: 25,
   adminPassword: "ycc_admin",
-  quarantineCost: 200,
+  quarantineCost: 1000,
   quarantineSupplyCost: 50,
 };

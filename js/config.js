@@ -18,7 +18,7 @@ const config = {
   chanceOfSpreading: 0.5,
   labLocalEffectRadius: 2,
   labLocalSpreadReduction: 0.1,
-  coinPerDay: 500,
+  coinPerDay: 0,
   labUpgradeCost: 5000,
   labUpgradeResearchBonus: 0.05,
   defaultPopulationDensity: 3750,

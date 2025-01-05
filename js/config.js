@@ -4,7 +4,7 @@ const config = {
   gridCols: 14,
   hospitalCost: 200, // Giảm từ 2000 xuống 200
   labCost: 200, // Giảm từ 2500 xuống 200
-  dayDuration: 10 * 60 * 1000,
+  dayDuration: 0.2 * 60 * 1000,
   initialMutationIn: [10, 15],
   mutationInterval: [5, 10],
   researchRate: 0.05,

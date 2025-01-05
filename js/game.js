@@ -142,9 +142,9 @@ const game = {
 
     initializeMap() {
         const map = document.querySelector('.map');
-        map.innerHTML = ''; // Xóa các ô hiện có
+        map.innerHTML = ''; // Clear existing cells
 
-        // Khởi tạo các ô
+        // Khởi tạo các ô với thông số random
         for (let i = 0; i < config.gridRows * config.gridCols; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell residential';
@@ -155,15 +155,16 @@ const game = {
                 utils.showCellInfo(i, this.city);
             });
 
+            // Random các thông số của ô
             const cellData = {
                 type: 'residential',
                 infected: 0,
                 immune: 0,
-                population: 100,
-                populationDensity: config.defaultPopulationDensity,
-                humidity: config.defaultHumidity,
-                temperature: config.defaultTemperature,
-                movementRate: config.defaultMovementRate,
+                population: 100, // Dân số cố định hoặc có thể random
+                populationDensity: this.getRandomNumber(1000, 5000), // Mật độ dân số random từ 1000 đến 5000
+                humidity: this.getRandomNumber(50, 90), // Độ ẩm random từ 50% đến 90%
+                temperature: this.getRandomNumber(20, 35), // Nhiệt độ random từ 20°C đến 35°C
+                movementRate: this.getRandomNumber(10, 40), // Tỷ lệ di chuyển random từ 10% đến 40%
                 hospitals: 0,
                 labs: 0,
                 labLevel: 0,
@@ -173,13 +174,17 @@ const game = {
             this.city.push(cellData);
             map.appendChild(cell);
         }
-		
+
         // Set next day for mutation
         this.nextMutationDay = Math.floor(Math.random() * (config.initialMutationIn[1] - config.initialMutationIn[0] + 1)) + config.initialMutationIn[0];
         console.log("next mutation: " + this.nextMutationDay);
         this.updateDashboard();
     },
 
+    // Hàm random số trong khoảng [min, max]
+    getRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
     startOutbreak() {
         if (!this.outbreakStarted) {
             this.outbreakStarted = true;

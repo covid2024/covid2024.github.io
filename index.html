@@ -81,39 +81,40 @@
 
     <!-- Di chuyển phần vaccine xuống control-panel -->
 	<!-- Thêm phần vaccine vào control-panel -->
-	<div class="control-panel">
-	  <div class="build-options">
-		<button class="build-button hospital" onclick="game.startBuilding('hospital')">
-		  🏥 Xây Bệnh Viện
-		  <span id="hospital-cost">($200)</span> <!-- Giá mới: 200 coin -->
-		</button>
-		<button class="build-button lab" onclick="game.startBuilding('lab')">
-		  🔬 Xây Phòng Lab
-		  <span id="lab-cost">($200)</span> <!-- Giá mới: 200 coin -->
-		</button>
-	  </div>
-	  <div class="action-buttons">
-		<button id="outbreak-button">Bùng Phát Dịch Bệnh</button>
-		<button id="quarantine-button">Khoanh Vùng</button>
-		<select id="quarantine-radius">
-			<option value="1">1 Ô</option>
-			<option value="2">2 Ô</option>
-			<option value="3">3 Ô</option>
-		</select>
-		<button id="social-distancing-button" onclick="game.applyMeasure('socialDistancing')">Dãn Cách</button>
-		<button id="mask-selling-button" onclick="game.applyMeasure('maskSelling')">Bán Khẩu Trang</button>
-		<button id="hygiene-education-button" onclick="game.applyMeasure('hygieneEducation')">Tuyên Truyền Vệ Sinh</button>
-		<button id="travel-restriction-button" onclick="game.applyMeasure('travelRestriction')">Hạn Chế Đi Lại</button>
-		<button id="smart-filter-button">Smart Filter</button>
-	  </div>
-	  <!-- Thêm phần vaccine vào control-panel -->
-	  <div class="vaccine-control">
-		<label for="vaccine-success-rate">Mức độ thành công của vaccine (%):</label>
-		<input type="number" id="vaccine-success-rate" min="0" max="100" value="0">
-		<button onclick="game.applyVaccine()">Áp dụng Vaccine</button>
-	  </div>
-	</div>
-
+	<!-- Thêm nút Áp dụng Khoanh Vùng -->
+<div class="control-panel">
+  <div class="build-options">
+    <button class="build-button hospital" onclick="game.startBuilding('hospital')">
+      🏥 Xây Bệnh Viện
+      <span id="hospital-cost">($200)</span>
+    </button>
+    <button class="build-button lab" onclick="game.startBuilding('lab')">
+      🔬 Xây Phòng Lab
+      <span id="lab-cost">($200)</span>
+    </button>
+  </div>
+  <div class="action-buttons">
+    <button id="outbreak-button">Bùng Phát Dịch Bệnh</button>
+    <button id="quarantine-button" onclick="game.startQuarantine()">Khoanh Vùng</button>
+    <button id="apply-quarantine-button" onclick="game.applyQuarantine()">Áp dụng Khoanh Vùng</button>
+    <select id="quarantine-radius">
+        <option value="1">1 Ô</option>
+        <option value="2">2 Ô</option>
+        <option value="3">3 Ô</option>
+    </select>
+    <button id="social-distancing-button" onclick="game.applyMeasure('socialDistancing')">Dãn Cách</button>
+    <button id="mask-selling-button" onclick="game.applyMeasure('maskSelling')">Bán Khẩu Trang</button>
+    <button id="hygiene-education-button" onclick="game.applyMeasure('hygieneEducation')">Tuyên Truyền Vệ Sinh</button>
+    <button id="travel-restriction-button" onclick="game.applyMeasure('travelRestriction')">Hạn Chế Đi Lại</button>
+    <button id="smart-filter-button">Smart Filter</button>
+  </div>
+  <!-- Thêm phần vaccine vào control-panel -->
+  <div class="vaccine-control">
+    <label for="vaccine-success-rate">Mức độ thành công của vaccine (%):</label>
+    <input type="number" id="vaccine-success-rate" min="0" max="100" value="0">
+    <button onclick="game.applyVaccine()">Áp dụng Vaccine</button>
+  </div>
+</div>
 
 	  <!-- Panel Admin -->
   <div id="admin-panel" style="display: none;">

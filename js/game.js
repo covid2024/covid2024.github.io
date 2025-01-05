@@ -119,17 +119,26 @@ const game = {
         // Sắp xếp theo nguy cơ giảm dần
         risks.sort((a, b) => b.risk - a.risk);
 
-        // Lấy top 5 khu vực có nguy cơ cao nhất
-        const top5 = risks.slice(0, 5);
+        // Chọn ngẫu nhiên 5 ô từ top 10 ô có nguy cơ cao nhất
+        const top10 = risks.slice(0, 10);
+        const top5 = [];
+        while (top5.length < 5 && top10.length > 0) {
+            const randomIndex = Math.floor(Math.random() * top10.length);
+            top5.push(top10.splice(randomIndex, 1)[0]);
+        }
 
         // Hiển thị thông báo
-        let message = "Top 5 khu vực có nguy cơ bùng dịch cao nhất:\n";
+        let message = "Top 5 khu vực có nguy cơ bùng dịch cao nhất (ngẫu nhiên):\n";
         top5.forEach((area, i) => {
             message += `${i + 1}. Ô ${area.index} - Nguy cơ: ${area.risk.toFixed(2)}\n`;
         });
 
         alert(message);
+
+        // Trả về danh sách các ô được chọn
+        return top5.map(area => area.index);
     },
+
 
     initializeMap() {
         const map = document.querySelector('.map');
@@ -174,14 +183,27 @@ const game = {
     startOutbreak() {
         if (!this.outbreakStarted) {
             this.outbreakStarted = true;
-            this.introducePatientZero(); // Introduce patient zero when the outbreak starts
+
+            // Lấy danh sách các ô có nguy cơ cao từ Smart Filter
+            const riskyAreas = this.showTopRiskyAreas();
+
+            // Chọn ngẫu nhiên một ô từ danh sách để bắt đầu bùng phát
+            const patientZeroIndex = riskyAreas[Math.floor(Math.random() * riskyAreas.length)];
+            this.city[patientZeroIndex].infected = 10; // Bắt đầu với 10 ca nhiễm
+            this.totalCases = 10;
+            this.newCases = 10;
+
+            // Update the visuals for the cell
+            this.updateCellVisuals(patientZeroIndex, this.city);
+            utils.addNotification('new-case', "Ca nhiễm đầu tiên xuất hiện tại ô " + patientZeroIndex);
+
             // Simulation loop
             this.simulationInterval = setInterval(() => {
                 this.simulateSpread();
-            }, 2000);
-            // Run simulation every 2 seconds
+            }, config.dayDuration); // Chạy mỗi ngày
         }
     },
+
 
     // Introduce patient zero to a random cell
     introducePatientZero() {
@@ -256,86 +278,76 @@ const game = {
 	lastSpreadDay: 0, // Theo dõi ngày cuối cùng dịch lây lan
 
     simulateSpread() {
-        const currentTime = Date.now();
-        const elapsedTime = currentTime - this.gameStartTime;
-        const daysPassed = Math.floor(elapsedTime / config.dayDuration);
+        let currentNewCases = 0;
+        let currentRecovered = 0;
+        let currentDeaths = 0;
 
-        // Chỉ lây lan dịch nếu đã qua một ngày mới
-        if (daysPassed > this.lastSpreadDay) {
-            this.lastSpreadDay = daysPassed; // Cập nhật ngày cuối cùng dịch lây lan
+        // Tính toán tiến độ nghiên cứu
+        this.researchProgress += this.calculateResearchProgress();
 
-            let currentNewCases = 0;
-            let currentRecovered = 0;
-            let currentDeaths = 0;
+        // Tạo bản sao của thành phố để mô phỏng
+        let cityCopy = JSON.parse(JSON.stringify(this.city));
 
-            // Tính toán tiến độ nghiên cứu
-            this.researchProgress += this.calculateResearchProgress();
-
-            // Tạo bản sao của thành phố để mô phỏng
-            let cityCopy = JSON.parse(JSON.stringify(this.city));
-
-            // Tính toán tổng giảm tỷ lệ tử vong và tỷ lệ lây lan từ các biện pháp
-            let totalDeathRateReduction = 0;
-            let totalSpreadRateReduction = 0;
-            for (const key in this.measures) {
-                if (this.measures[key].applied) {
-                    totalDeathRateReduction += this.measures[key].deathRateReduction;
-                    totalSpreadRateReduction += this.measures[key].spreadRateReduction;
-                }
+        // Tính toán tổng giảm tỷ lệ tử vong và tỷ lệ lây lan từ các biện pháp
+        let totalDeathRateReduction = 0;
+        let totalSpreadRateReduction = 0;
+        for (const key in this.measures) {
+            if (this.measures[key].applied) {
+                totalDeathRateReduction += this.measures[key].deathRateReduction;
+                totalSpreadRateReduction += this.measures[key].spreadRateReduction;
             }
+        }
 
-            // Logic lây lan
-            for (let i = 0; i < this.city.length; i++) {
-                if (this.city[i].type === 'residential' && this.city[i].infected > 0) {
-                    const adjacentCells = utils.getAdjacentCells(i, config.gridRows, config.gridCols);
+        // Logic lây lan
+        for (let i = 0; i < this.city.length; i++) {
+            if (this.city[i].type === 'residential' && this.city[i].infected > 0) {
+                const adjacentCells = utils.getAdjacentCells(i, config.gridRows, config.gridCols);
 
-                    for (const adjIndex of adjacentCells) {
-                        if (cityCopy[adjIndex].type === 'residential' && cityCopy[adjIndex].infected < cityCopy[adjIndex].population) {
-                            let hasLabEffect = false;
-                            let hasHospitalEffect = false;
+                for (const adjIndex of adjacentCells) {
+                    if (cityCopy[adjIndex].type === 'residential' && cityCopy[adjIndex].infected < cityCopy[adjIndex].population) {
+                        let hasLabEffect = false;
 
-                            // Kiểm tra xem có phòng lab hoặc bệnh viện gần đó không
-                            const neighborCells = utils.getAdjacentCells(adjIndex, config.gridRows, config.gridCols);
-                            for (const neighborIndex of neighborCells) {
-                                if (this.city[neighborIndex].type === 'lab') {
-                                    hasLabEffect = true;
-                                } else if (this.city[neighborIndex].type === 'hospital') {
-                                    hasHospitalEffect = true;
-                                }
+                        // Kiểm tra xem có phòng lab gần đó không
+                        const neighborCells = utils.getAdjacentCells(adjIndex, config.gridRows, config.gridCols);
+                        for (const neighborIndex of neighborCells) {
+                            if (this.city[neighborIndex].type === 'lab') {
+                                hasLabEffect = true;
+                                break;
                             }
+                        }
 
-                            let chanceOfSpreading = config.chanceOfSpreading;
-                            // Giảm tỷ lệ lây lan nếu có phòng lab gần đó
-                            if (hasLabEffect) {
-                                chanceOfSpreading *= (1 - config.labLocalSpreadReduction);
+                        let chanceOfSpreading = config.chanceOfSpreading;
+                        // Giảm tỷ lệ lây lan nếu có phòng lab gần đó
+                        if (hasLabEffect) {
+                            chanceOfSpreading *= (1 - config.labLocalSpreadReduction);
+                        }
+
+                        // Giảm tỷ lệ lây lan rất nhiều nếu ô được khoanh vùng
+                        if (cityCopy[adjIndex].isQuarantined) {
+                            chanceOfSpreading *= 0.1; // Giảm 90%
+                        }
+
+                        // Kiểm tra xem dịch có lây lan sang ô kế bên không
+                        if (Math.random() < chanceOfSpreading) {
+                            // Tính toán số ca lây nhiễm
+                            let transfer = Math.floor(
+                                (cityCopy[i].infected / cityCopy[i].population) *
+                                config.spreadRate *
+                                (1 - totalSpreadRateReduction) *
+                                cityCopy[adjIndex].population
+                            );
+
+                            // Nghiên cứu giảm số ca lây nhiễm
+                            transfer = Math.floor(transfer * (1 - this.researchProgress / 100));
+                            transfer = Math.min(transfer, cityCopy[adjIndex].population - cityCopy[adjIndex].infected);
+
+                            if (transfer > 0) {
+                                cityCopy[adjIndex].infected += transfer;
+                                currentNewCases += transfer;
+                                this.updateCellVisuals(adjIndex, cityCopy);
+                                utils.addNotification('new-case', `+${transfer} Ca Nhiễm Mới ở ô ${adjIndex}`);
                             }
-
-                            // Kiểm tra xem dịch có lây lan sang ô kế bên không
-                            if (Math.random() < chanceOfSpreading) {
-                                // Tính toán số ca lây nhiễm
-                                let transfer = Math.floor(
-                                    (cityCopy[i].infected / cityCopy[i].population) *
-                                    config.spreadRate *
-                                    (1 - totalSpreadRateReduction) *
-                                    cityCopy[adjIndex].population
-                                );
-
-                                // Nghiên cứu giảm số ca lây nhiễm
-                                transfer = Math.floor(transfer * (1 - this.researchProgress / 100));
-                                transfer = Math.min(transfer, cityCopy[adjIndex].population - cityCopy[adjIndex].infected);
-
-                                if (transfer > 0) {
-                                    // Khu vực cách ly giảm số ca lây nhiễm
-                                    if (cityCopy[adjIndex].isQuarantined) {
-                                        transfer = Math.floor(transfer * 0.1); // Giảm 90% trong khu vực cách ly
-                                    }
-
-                                    cityCopy[adjIndex].infected += transfer;
-                                    currentNewCases += transfer; // Cập nhật số ca nhiễm mới
-                                    this.updateCellVisuals(adjIndex, cityCopy);
-                                    utils.addNotification('new-case', `+${transfer} Ca Nhiễm Mới ở ô ${adjIndex}`);
-                                }
-                            }
+                            
                         }
                     }
                 }
@@ -489,27 +501,76 @@ const game = {
         }
     },
 
-    startQuarantine() {
-        if (this.coinCount >= this.quarantineCost) {
-            if (this.supplyCount >= this.quarantineSupplyCost) {
-                this.isQuarantining = true;
-                this.quarantineRadius = parseInt(document.getElementById('quarantine-radius').value);
+    // Các thuộc tính khác giữ nguyên...
+    quarantineCostPerCell: 200, // Mỗi ô tốn 200 coin
+    maxQuarantineCells: 10, // Tối đa 10 ô được khoanh vùng
+    selectedQuarantineCells: [], // Danh sách các ô được chọn để khoanh vùng
 
-                // Highlight cells where quarantine can be started
-                const cells = document.querySelectorAll('.cell');
-                cells.forEach((cell, index) => {
-                    if (this.city[index].type === 'residential') {
-                        cell.style.cursor = 'crosshair';
-                    } else {
-                        cell.style.cursor = 'not-allowed';
-                    }
-                });
-            } else {
-                alert("Không đủ vật tư để khoanh vùng!");
-            }
+    startQuarantine() {
+        if (this.coinCount >= this.quarantineCostPerCell) {
+            this.isQuarantining = true;
+            this.selectedQuarantineCells = []; // Reset danh sách ô được chọn
+
+            // Thông báo cho người chơi
+            alert(`Bạn có thể chọn tối đa ${this.maxQuarantineCells} ô để khoanh vùng. Mỗi ô tốn ${this.quarantineCostPerCell} coin.`);
+
+            // Highlight các ô có thể khoanh vùng
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, index) => {
+                if (this.city[index].type === 'residential') {
+                    cell.style.cursor = 'pointer';
+                    cell.addEventListener('click', () => this.handleQuarantineSelection(index));
+                } else {
+                    cell.style.cursor = 'not-allowed';
+                }
+            });
         } else {
             alert("Không đủ coin để khoanh vùng!");
         }
+    },
+
+    handleQuarantineSelection(cellIndex) {
+        if (this.isQuarantining && this.selectedQuarantineCells.length < this.maxQuarantineCells) {
+            // Kiểm tra xem ô đã được chọn chưa
+            if (!this.selectedQuarantineCells.includes(cellIndex)) {
+                this.selectedQuarantineCells.push(cellIndex); // Thêm ô vào danh sách chọn
+                document.getElementById(`cell-${cellIndex}`).classList.add('quarantine-selected'); // Đánh dấu ô được chọn
+            }
+        } else {
+            alert(`Bạn đã chọn đủ ${this.maxQuarantineCells} ô.`);
+        }
+    },
+
+    applyQuarantine() {
+        if (this.selectedQuarantineCells.length > 0) {
+            const totalCost = this.selectedQuarantineCells.length * this.quarantineCostPerCell;
+
+            if (this.coinCount >= totalCost) {
+                this.coinCount -= totalCost; // Trừ coin
+                this.selectedQuarantineCells.forEach(cellIndex => {
+                    this.city[cellIndex].isQuarantined = true;
+                    document.getElementById(`cell-${cellIndex}`).classList.add('quarantine');
+                });
+
+                alert(`Khoanh vùng thành công ${this.selectedQuarantineCells.length} ô. Tổng chi phí: ${totalCost} coin.`);
+                this.updateDashboard();
+            } else {
+                alert("Không đủ coin để khoanh vùng!");
+            }
+        } else {
+            alert("Bạn chưa chọn ô nào để khoanh vùng.");
+        }
+
+        // Reset trạng thái khoanh vùng
+        this.isQuarantining = false;
+        this.selectedQuarantineCells = [];
+
+        // Reset cursor và event listener
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.style.cursor = 'pointer';
+            cell.removeEventListener('click', this.handleQuarantineSelection);
+        });
     },
 
     handleCellClick(cellIndex) {

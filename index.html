@@ -1,151 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Pandemic Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="dashboard">
-    <header class="header">
-      <div class="day">Ngày: 1</div>
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-value" id="total-cases" style="color: #f44336;">0</div>
-          <div class="stat-label">Tổng Ca Nhiễm</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="new-cases" style="color: #f44336;">0</div>
-          <div class="stat-label">Ca Nhiễm Mới</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="death-rate" style="color: #f44336;">0%</div>
-          <div class="stat-label">Tỷ Lệ Tử Vong</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="recovered-cases" style="color: #4CAF50;">0</div>
-          <div class="stat-label">Ca Hồi Phục</div>
-        </div>
-      </div>
-    </header>
-
-    <aside class="sidebar">
-      <div class="resources">
-        <h3>Tài Nguyên</h3>
-        <div class="resource-item">
-          <span>Coin</span>
-          <span id="coin-count">5000</span>
-        </div>
-        <div class="resource-item">
-          <span>Vật tư</span>
-          <span id="supply-count">100</span>
-        </div>
-      </div>
-
-      <div class="counter-measures">
-        <h3>Biện Pháp Chống Dịch</h3>
-        <div class="counter-measure-item">
-          <span>Bệnh viện đã xây</span>
-          <span id="hospitals-built">0</span>
-        </div>
-        <div class="counter-measure-item">
-          <span>Phòng lab đã xây</span>
-          <span id="labs-built">0</span>
-        </div>
-        <div class="counter-measure-item">
-            <span>Dãn cách</span>
-            <span id="social-distancing-status">Chưa</span>
-        </div>
-        <div class="counter-measure-item">
-            <span>Bán khẩu trang</span>
-            <span id="mask-selling-status">Chưa</span>
-        </div>
-        <div class="counter-measure-item">
-            <span>Tuyên truyền vệ sinh</span>
-            <span id="hygiene-education-status">Chưa</span>
-        </div>
-        <div class="counter-measure-item">
-            <span>Hạn chế đi lại</span>
-            <span id="travel-restriction-status">Chưa</span>
-        </div>
-      </div>
-      <button id="admin-button">Admin</button>
-    </aside>
-
-    <div class="map-container">
-      <div class="notifications" id="notifications-container"></div>
-      <div class="virus-alert"></div>
-      <div class="map">
-        <!-- Các ô (cells) sẽ được tạo ở đây -->
-      </div>
-    </div>
-
-    <!-- Di chuyển phần vaccine xuống control-panel -->
-	<div class="control-panel">
-	  <div class="build-options">
-		<button class="build-button hospital" onclick="game.startBuilding('hospital')">
-		  🏥 Xây Bệnh Viện
-		  <span id="hospital-cost">($2000)</span>
-		</button>
-		<button class="build-button lab" onclick="game.startBuilding('lab')">
-		  🔬 Xây Phòng Lab
-		  <span id="lab-cost">($2500)</span>
-		</button>
-	  </div>
-	  <div class="action-buttons">
-		<button id="outbreak-button">Bùng Phát Dịch Bệnh</button>
-		<button id="quarantine-button">Khoanh Vùng</button>
-		<select id="quarantine-radius">
-			<option value="1">1 Ô</option>
-			<option value="2">2 Ô</option>
-			<option value="3">3 Ô</option>
-		</select>
-		<button id="social-distancing-button" onclick="game.applyMeasure('socialDistancing')">Dãn Cách</button>
-		<button id="mask-selling-button" onclick="game.applyMeasure('maskSelling')">Bán Khẩu Trang</button>
-		<button id="hygiene-education-button" onclick="game.applyMeasure('hygieneEducation')">Tuyên Truyền Vệ Sinh</button>
-		<button id="travel-restriction-button" onclick="game.applyMeasure('travelRestriction')">Hạn Chế Đi Lại</button>
-		<button id="smart-filter-button">Smart Filter</button>
-	  </div>
-	  <!-- Thêm phần vaccine vào control-panel -->
-	  <div class="vaccine-control">
-		<label for="vaccine-success-rate">Mức độ thành công của vaccine (%):</label>
-		<input type="number" id="vaccine-success-rate" min="0" max="100" value="0">
-		<button onclick="game.applyVaccine()">Áp dụng Vaccine</button>
-	  </div>
-	</div>
-	  <!-- Panel Admin -->
-  <div id="admin-panel" style="display: none;">
-    <div class="admin-header">
-      <h2>Admin Panel</h2>
-      <button id="close-admin-panel">X</button>
-    </div>
-    <label for="password">Password:</label>
-    <input type="password" id="password">
-    <button id="login-button">Login</button>
-    <div id="admin-controls" style="display: none;">
-      <h3>Adjust Resources</h3>
-      <label for="coin-adjustment">Coin:</label>
-      <input type="number" id="coin-adjustment" value="0">
-      <button onclick="game.adjustCoins()">Adjust</button><br>
-      <label for="supply-adjustment">Supply:</label>
-      <input type="number" id="supply-adjustment" value="0">
-      <button onclick="game.adjustSupplies()">Adjust</button>
-    </div>
-  </div>
-
-  <!-- Panel hiển thị thông tin chi tiết của ô (cell) -->
-  <div id="cell-info-panel" style="display: none;">
-    <div class="info-header">
-      <h2 id="cell-info-title">Thông Tin Ô</h2>
-      <button id="close-cell-info-panel">X</button>
-    </div>
-    <div id="cell-info-content">
-      <!-- Nội dung thông tin sẽ được điền vào đây -->
-    </div>
-  </div>
-
-  <script src="js/config.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/main.js"></script>
-</body>
-</html>
+// js/config.js
+const config = {
+  gridRows: 14,
+  gridCols: 14,
+  hospitalCost: 200, // Giảm từ 2000 xuống 200
+  labCost: 200, // Giảm từ 2500 xuống 200
+  dayDuration: 10 * 60 * 1000,
+  initialMutationIn: [10, 15],
+  mutationInterval: [5, 10],
+  researchRate: 0.05,
+  recoveryRate: 0.03,
+  hospitalRecoveryBonus: 0.005,
+  hospitalLocalEffectRadius: 2,
+  deathRate: 0.01,
+  researchImpactOnDeathRate: 1000,
+  spreadRate: 0.3,
+  spreadRadius: 3,
+  chanceOfSpreading: 0.5,
+  labLocalEffectRadius: 2,
+  labLocalSpreadReduction: 0.1,
+  coinPerDay: 500,
+  labUpgradeCost: 5000,
+  labUpgradeResearchBonus: 0.05,
+  defaultPopulationDensity: 3750,
+  defaultHumidity: 75,
+  defaultTemperature: 27,
+  defaultMovementRate: 25,
+  adminPassword: "ycc_admin",
+  quarantineCost: 1000,
+  quarantineSupplyCost: 50,
+};

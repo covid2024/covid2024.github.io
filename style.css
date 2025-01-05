@@ -10,16 +10,10 @@
   --text-color: #c9d1d9;
   --accent-color: #238636;
   --font-family: 'Roboto', sans-serif;
-  /* More modern font */
   --shadow-color: rgba(0, 0, 0, 0.5);
-
-  /* Terrain colors (used for icons/patterns instead of cell background) */
   --residential-icon-color: #5C4033;
-  /* Earthy brown */
   --park-icon-color: #355E3B;
-  /* Forest green */
   --water-icon-color: #228CDB;
-  /* Water blue */
 }
 
 body {
@@ -32,25 +26,22 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden; /* Prevent scrolling of the entire page */
+  overflow: hidden;
 }
 
 .dashboard {
   display: grid;
   grid-template-columns: 250px 1fr;
-  /* Adjusted column widths */
-  grid-template-rows: auto 1fr min-content; /* Changed to min-content */
+  grid-template-rows: auto 1fr min-content;
   gap: 20px;
   width: 95%;
-  max-width: 1000px;
-  /* Adjusted max-width */
-  height: 95vh; /* Set height to 95% of viewport height */
+  max-width: 1200px; /* Tăng max-width để phù hợp với map lớn hơn */
+  height: 95vh;
   padding: 20px;
   box-shadow: 0 4px 10px var(--shadow-color);
-  /* Stronger shadow */
   border-radius: 15px;
   background: var(--background-color);
-  overflow-y: auto; /* Allow scrolling within the dashboard */
+  overflow-y: auto;
 }
 
 /* Header Styles */
@@ -108,6 +99,68 @@ body {
   /* Stronger shadow */
 }
 
+/* Panel hiển thị thông tin chi tiết của ô (cell) */
+/* Panel hiển thị thông tin chi tiết của ô (cell) */
+#cell-info-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--panel-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  z-index: 1000;
+  max-width: 400px;
+  width: 100%;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+#close-cell-info-panel {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#close-cell-info-panel:hover {
+  background: #d32f2f;
+}
+
+#cell-info-content {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Nút Smart Filter */
+#smart-filter-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  font-size: 13px;
+  margin: 5px;
+}
+
+#smart-filter-button:hover {
+  background: #1f682e;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
 .resources,
 .counter-measures {
   background: #1f252e;
@@ -148,24 +201,20 @@ body {
   padding: 10px;
   overflow: hidden;
   box-shadow: 0 2px 5px var(--shadow-color);
-  /* Stronger shadow */
+  width: 100%;
+  height: 100%;
 }
 
 .map {
   display: grid;
-  grid-template-columns: repeat(14, 1fr);
-  /* Updated for 14 columns */
-  grid-template-rows: repeat(14, 1fr);
-  /* Updated for 14 rows */
+  grid-template-columns: repeat(14, 1fr); /* 14 cột */
+  grid-template-rows: repeat(14, 1fr); /* 14 hàng */
   gap: 3px;
   width: 100%;
-  max-width: 800px;
-  /* Adjust for desired map size */
-  aspect-ratio: 1 / 1;
+  height: 100%;
   background: #161b22;
   border: 2px solid #373e47;
   margin: 0 auto;
-  /* Center the map */
 }
 
 .cell {
@@ -269,6 +318,10 @@ body {
   /* Added shadow to icon */
 }
 
+.cell.quarantine {
+  border: 2px solid #ff0000; /* Viền đỏ để đánh dấu khu vực cách ly */
+}
+
 .cell.quarantine::after {
   content: '';
   position: absolute;
@@ -286,20 +339,41 @@ body {
 }
 
 /* Control Panel */
-.control-panel {
-  grid-column: 1 / -1;
-  background: var(--panel-color);
+/* CSS cho phần vaccine trong control-panel */
+.control-panel .vaccine-control {
+  margin-top: 15px;
   padding: 10px;
+  background: var(--panel-color);
   border-radius: 10px;
-  display: flex;
-  flex-direction: column; /* Changed to column */
-  justify-content: space-between;
-  align-items: stretch; /* Changed to stretch */
   box-shadow: 0 2px 5px var(--shadow-color);
-  /* Stronger shadow */
-  align-self: end; /* Position at the bottom */
 }
 
+.control-panel .vaccine-control label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.control-panel .vaccine-control input {
+  width: 60px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.control-panel .vaccine-control button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background: var(--accent-color);
+  color: white;
+  cursor: pointer;
+}
+
+.control-panel .vaccine-control button:hover {
+  background: #1f682e;
+}
 .action-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -637,4 +711,39 @@ body {
   box-shadow: 0 2px 5px var(--shadow-color);
   font-size: 13px;
   margin-top: 10px;
+}
+
+.vaccine-control {
+  margin-top: 20px;
+  padding: 10px;
+  background: var(--panel-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.vaccine-control label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.vaccine-control input {
+  width: 60px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.vaccine-control button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background: var(--accent-color);
+  color: white;
+  cursor: pointer;
+}
+
+.vaccine-control button:hover {
+  background: #1f682e;
 }

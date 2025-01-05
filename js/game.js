@@ -8,7 +8,7 @@ const game = {
     hospitalsBuilt: 0,
     labsBuilt: 0,
     measuresTaken: 0,
-    coinCount: 5000,
+    coinCount: 0,
     supplyCount: 100,
     isBuilding: false,
     buildingType: null,

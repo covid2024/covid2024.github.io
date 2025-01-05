@@ -1,13 +1,13 @@
 // js/main.js
 game.initializeMap();
 
-//Give player 500 coins every day
+// Cho người chơi 500 coin mỗi ngày
 setInterval(() => {
   game.coinCount += config.coinPerDay;
   game.updateDashboard();
 }, config.dayDuration);
 
-// Admin button functionality
+// Nút Admin
 document.getElementById('admin-button').addEventListener('click', () => {
   document.getElementById('admin-panel').style.display = 'block';
 });
@@ -23,23 +23,33 @@ document.getElementById('login-button').addEventListener('click', () => {
   }
 });
 
-// Close Admin Panel
+// Đóng Admin Panel
 document.getElementById('close-admin-panel').addEventListener('click', () => {
   document.getElementById('admin-panel').style.display = 'none';
-  // Reset the admin panel for next use
   document.getElementById('admin-controls').style.display = 'none';
   document.getElementById('password').style.display = 'block';
   document.getElementById('login-button').style.display = 'block';
-  document.getElementById('password').value = ''; // Clear the password field
+  document.getElementById('password').value = '';
 });
 
-// Outbreak button functionality
+// Nút Bùng Phát Dịch
 document.getElementById('outbreak-button').addEventListener('click', () => {
   game.startOutbreak();
-  document.getElementById('outbreak-button').disabled = true; // Disable the button after outbreak starts
+  document.getElementById('outbreak-button').disabled = true;
 });
 
-// Quarantine button functionality
+// Nút Khoanh Vùng
+// js/main.js
 document.getElementById('quarantine-button').addEventListener('click', () => {
   game.startQuarantine();
+});
+
+// Đóng panel thông tin chi tiết
+document.getElementById('close-cell-info-panel').addEventListener('click', () => {
+  utils.hideCellInfo();
+});
+
+// Nút Smart Filter
+document.getElementById('smart-filter-button').addEventListener('click', () => {
+  game.showTopRiskyAreas();
 });

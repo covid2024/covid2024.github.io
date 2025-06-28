@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>AR Capture Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+        
+        #ar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none;
+            overflow: hidden;
+        }
+        
+        #video-feed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            touch-action: none;
+        }
+        
+        #touch-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            touch-action: none;
+            background: transparent;
+        }
+        
+        #message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1rem 2rem;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+        
+        #debug-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 15;
+            font-family: monospace;
+        }
+        
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 16px;
+            text-align: center;
+            z-index: 5;
+            max-width: 80%;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900">
+
+    <div id="ar-container">
+        <video id="video-feed" playsinline autoplay muted></video>
+        <canvas id="three-canvas"></canvas>
+        <div id="touch-overlay"></div>
+    </div>
+
+    <div id="message-box"></div>
+    <div id="debug-info">Touch to start</div>
+    <div id="instructions">👆 Swipe UP to throw the ball!</div>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/"
+      }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
+        // Configuration
+        const CREATURE_SCALE = 0.5;
+
+        // DOM Elements
+        const video = document.getElementById('video-feed');
+        const canvas = document.getElementById('three-canvas');
+        const touchOverlay = document.getElementById('touch-overlay');
+        const messageBox = document.getElementById('message-box');
+        const debugInfo = document.getElementById('debug-info');
+        const instructions = document.getElementById('instructions');
+
+        // Game variables
+        let scene, camera, renderer;
+        let targetObject, ball;
+        let isThrowing = false;
+        let throwVelocity = new THREE.Vector3();
+        let clock = new THREE.Clock();
+        let loadedUserModel = null;
+        let targetVelocity = new THREE.Vector3();
+        const movementBounds = { x: 2.5, y: 1.5 };
+        let targetBoundingBox, ballBoundingBox;
+        let canThrow = true;
+        let targetCaptured = false;
+
+        // Touch handling
+        let touchData = {
+            startX: 0,
+            startY: 0,
+            endX: 0,
+            endY: 0,
+            startTime: 0,
+            endTime: 0,
+            isActive: false
+        };
+
+        function updateDebug(text) {
+            debugInfo.textContent = text;
+        }
+
+        async function init() {
+            updateDebug("Initializing camera...");
+            
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                });
+                video.srcObject = stream;
+                await new Promise(resolve => video.onloadedmetadata = resolve);
+                updateDebug("Camera ready");
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                showMessage("Camera access failed. Using without camera.", 3000);
+                updateDebug("No camera - touch mode");
+            }
+
+            // Three.js setup
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas,
+                alpha: true,
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            // Game objects
+            createTarget();
+            createBall();
+            setupEventListeners();
+            animate();
+            
+            setTimeout(() => {
+                instructions.style.opacity = '0';
+                instructions.style.transition = 'opacity 1s ease-out';
+            }, 5000);
+        }
+
+        function createFallbackTarget() {
+            const geometry = new THREE.IcosahedronGeometry(1, 0);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x29B6F6, 
+                shininess: 100, 
+                specular: 0xffffff,
+                emissive: 0x01579B, 
+                emissiveIntensity: 0.4
+            });
+            targetObject = new THREE.Mesh(geometry, material);
+            targetObject.position.set(0, 0, -10);
+            targetObject.scale.set(CREATURE_SCALE, CREATURE_SCALE, CREATURE_SCALE);
+            scene.add(targetObject);
+            targetBoundingBox = new THREE.Box3().setFromObject(targetObject);
+            targetVelocity.set((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0);
+        }
+
+        function createTarget() {
+            if (loadedUserModel) {
+                targetObject = loadedUserModel.clone();
+                scene.add(targetObject);
+                targetBoundingBox = new THREE.Box3().setFromObject(targetObject);
+                targetVelocity.set((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0);
+                return;
+            }
+
+            // Load custom .obj model with texture
+            // For local files, you need a web server. 
+            // These are example URLs - replace with your hosted files or use local server
+            const objModelUrl = './base.obj';
+            const textureUrl = './base.png';
+            
+            // Alternative: Use a sample model from online (uncomment to test)
+            // const objModelUrl = 'https://threejs.org/examples
+
+            const textureLoader = new THREE.TextureLoader();
+            const objLoader = new OBJLoader();
+
+            updateDebug("Loading custom model...");
+
+            textureLoader.load(textureUrl, (texture) => {
+                updateDebug("Texture loaded, loading OBJ...");
+                objLoader.load(objModelUrl, (object) => {
+                    updateDebug("OBJ loaded successfully!");
+                    
+                    object.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.material = new THREE.MeshStandardMaterial({ map: texture });
+                        }
+                    });
+                    
+                    object.scale.set(CREATURE_SCALE, CREATURE_SCALE, CREATURE_SCALE); 
+                    object.position.set(0, 0, -10);
+                    
+                    loadedUserModel = object; // Cache the model
+                    targetObject = loadedUserModel.clone(); // Use a clone
+                    
+                    scene.add(targetObject);
+                    targetBoundingBox = new THREE.Box3().setFromObject(targetObject);
+                    // Start the creature moving
+                    targetVelocity.set((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0);
+                    
+                    updateDebug("Custom model ready!");
+                }, undefined, (error) => {
+                    console.error('Error loading .obj model:', error);
+                    updateDebug("OBJ load failed, using default");
+                    showMessage('Custom model not found. Using default.', 3000);
+                    createFallbackTarget();
+                });
+            }, undefined, (error) => {
+                console.error('Error loading texture:', error);
+                updateDebug("Texture load failed, using default");
+                showMessage('Texture not found. Using default.', 3000);
+                createFallbackTarget();
+            });
+        }
+
+        function createBall() {
+            const upperGeometry = new THREE.SphereGeometry(0.3, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+            const lowerGeometry = new THREE.SphereGeometry(0.3, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+            ball = new THREE.Group();
+            
+            ball.add(new THREE.Mesh(upperGeometry, new THREE.MeshStandardMaterial({ 
+                color: 0xef4444, roughness: 0.4, metalness: 0.1 
+            })));
+            ball.add(new THREE.Mesh(lowerGeometry, new THREE.MeshStandardMaterial({ 
+                color: 0xfafafa, roughness: 0.4, metalness: 0.1 
+            })));
+            
+            const band = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.31, 0.31, 0.1, 32), 
+                new THREE.MeshStandardMaterial({ color: 0x212121 })
+            );
+            const button = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.1, 0.1, 0.12, 32), 
+                new THREE.MeshStandardMaterial({ color: 0xfafafa })
+            );
+            button.position.z = 0.3;
+            
+            ball.add(band);
+            ball.add(button);
+            resetBall();
+            scene.add(ball);
+            ballBoundingBox = new THREE.Box3().setFromObject(ball);
+        }
+
+        function setupEventListeners() {
+            window.addEventListener('resize', onWindowResize);
+            
+            // Prevent all default touch behaviors
+            document.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+            document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+            document.addEventListener('touchend', e => e.preventDefault(), { passive: false });
+            document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
+            document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
+            document.addEventListener('gestureend', e => e.preventDefault(), { passive: false });
+
+            // Touch events on overlay
+            touchOverlay.addEventListener('touchstart', handleTouchStart, { passive: false });
+            touchOverlay.addEventListener('touchend', handleTouchEnd, { passive: false });
+            touchOverlay.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+            
+            // Mouse events for desktop
+            touchOverlay.addEventListener('mousedown', handleMouseDown);
+            touchOverlay.addEventListener('mouseup', handleMouseUp);
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!canThrow || targetCaptured || !targetObject) {
+                updateDebug("Can't throw right now");
+                return;
+            }
+
+            const touch = e.touches[0];
+            touchData.startX = touch.clientX;
+            touchData.startY = touch.clientY;
+            touchData.startTime = Date.now();
+            touchData.isActive = true;
+            
+            updateDebug(`Touch start: ${Math.round(touch.clientX)}, ${Math.round(touch.clientY)}`);
+        }
+
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!touchData.isActive || !canThrow || targetCaptured || !targetObject) {
+                touchData.isActive = false;
+                return;
+            }
+
+            const touch = e.changedTouches[0];
+            touchData.endX = touch.clientX;
+            touchData.endY = touch.clientY;
+            touchData.endTime = Date.now();
+            
+            processSwipe();
+            touchData.isActive = false;
+        }
+
+        function handleMouseDown(e) {
+            if (!canThrow || targetCaptured || !targetObject) return;
+            
+            touchData.startX = e.clientX;
+            touchData.startY = e.clientY;
+            touchData.startTime = Date.now();
+            touchData.isActive = true;
+            
+            updateDebug(`Mouse down: ${Math.round(e.clientX)}, ${Math.round(e.clientY)}`);
+        }
+
+        function handleMouseUp(e) {
+            if (!touchData.isActive || !canThrow || targetCaptured || !targetObject) {
+                touchData.isActive = false;
+                return;
+            }
+
+            touchData.endX = e.clientX;
+            touchData.endY = e.clientY;
+            touchData.endTime = Date.now();
+            
+            processSwipe();
+            touchData.isActive = false;
+        }
+
+        function processSwipe() {
+            const deltaX = touchData.endX - touchData.startX;
+            const deltaY = touchData.startY - touchData.endY; // Positive = upward
+            const deltaTime = touchData.endTime - touchData.startTime;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            const speed = distance / deltaTime;
+
+            updateDebug(`Swipe: ΔY=${Math.round(deltaY)}, Speed=${speed.toFixed(2)}`);
+
+            // More lenient swipe detection
+            if (deltaY > 20 && deltaTime < 1000) { // Reduced from 30 to 20
+                const power = Math.min(deltaY / 150, 2.0); // Increased max power
+                const sideForce = Math.max(-2, Math.min(2, deltaX / 100));
+
+                throwVelocity.set(
+                    sideForce * 6,
+                    power * 20,
+                    -power * 30
+                );
+
+                isThrowing = true;
+                canThrow = false;
+                
+                updateDebug(`THROW! Power: ${power.toFixed(2)}`);
+                showMessage("🔴 Ball thrown!", 1000);
+            } else {
+                updateDebug(`No throw: ΔY=${Math.round(deltaY)}, Time=${deltaTime}`);
+                showMessage("Swipe UP to throw!", 1500);
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function updateTargetMovement(deltaTime) {
+            if (!targetObject || targetCaptured) return;
+            
+            targetObject.position.add(targetVelocity.clone().multiplyScalar(deltaTime));
+            
+            if (Math.abs(targetObject.position.x) > movementBounds.x) {
+                targetVelocity.x *= -1;
+            }
+            if (Math.abs(targetObject.position.y) > movementBounds.y) {
+                targetVelocity.y *= -1;
+            }
+
+            targetObject.rotation.y += 0.5 * deltaTime;
+        }
+
+        function updateBall(deltaTime) {
+            if (isThrowing) {
+                throwVelocity.y -= 25 * deltaTime; // Gravity
+                ball.position.add(throwVelocity.clone().multiplyScalar(deltaTime));
+                ball.rotation.x -= 2 * deltaTime;
+                ballBoundingBox.setFromObject(ball);
+                
+                if (targetObject && ballBoundingBox.intersectsBox(targetBoundingBox)) {
+                    capture();
+                }
+                
+                if (ball.position.y < -5) {
+                    isThrowing = false;
+                    setTimeout(() => {
+                        resetBall();
+                        showMessage("Missed! Try again.", 1500);
+                        canThrow = true;
+                        updateDebug("Ready to throw");
+                    }, 500);
+                }
+            }
+        }
+
+        function capture() {
+            isThrowing = false;
+            targetCaptured = true;
+            updateDebug("CAPTURED!");
+            showMessage("🎉 CAPTURED!", 3000);
+            
+            let startTime = clock.getElapsedTime();
+            const startPos = targetObject.position.clone();
+            const startScale = targetObject.scale.clone();
+
+            function animateCapture() {
+                const progress = Math.min((clock.getElapsedTime() - startTime) / 1.0, 1.0);
+                targetObject.position.lerpVectors(startPos, ball.position, progress);
+                targetObject.scale.lerpVectors(startScale, new THREE.Vector3(0.01, 0.01, 0.01), progress);
+                
+                if (progress < 1.0) {
+                    requestAnimationFrame(animateCapture);
+                } else {
+                    scene.remove(targetObject);
+                    targetObject = null;
+                    setTimeout(resetGame, 2000);
+                }
+            }
+            animateCapture();
+        }
+
+        function resetBall() {
+            ball.position.set(0, -2.5, 0);
+            ball.rotation.set(0, 0, 0);
+            throwVelocity.set(0, 0, 0);
+        }
+
+        function resetGame() {
+            createTarget();
+            resetBall();
+            targetCaptured = false;
+            canThrow = true;
+            updateDebug("New creature spawned!");
+            showMessage("🎯 New creature appeared!", 2000);
+        }
+
+        function showMessage(text, duration = 2000) {
+            messageBox.textContent = text;
+            messageBox.style.opacity = '1';
+            setTimeout(() => { 
+                messageBox.style.opacity = '0'; 
+            }, duration);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const deltaTime = clock.getDelta();
+
+            updateTargetMovement(deltaTime);
+            updateBall(deltaTime);
+            
+            if (targetObject) {
+                targetBoundingBox.setFromObject(targetObject);
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Start the game
+        init();
+
+    </script>
+</body>
+</html>

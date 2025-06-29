@@ -437,57 +437,57 @@
 
         // --- UPDATED: Added avatarUrl property ---
         const creatures = [
-			{
-				"id": 1,
-				"name": "Mỹ Quang Kình",
-				"description": "Hiện thân của Ban Meddes (Media & Design), nơi hội tụ những tâm hồn sáng tạo và con mắt nghệ thuật. Ban chịu trách nhiệm toàn bộ về mặt hình ảnh của CLB, từ thiết kế poster, quay dựng video, đến chụp những bộ ảnh lung linh trong sự kiện. Meddes chính là người khoác lên YCC một chiếc áo rực rỡ và chuyên nghiệp.",
-				"modelUrl": "./models/aqua_sparkle.obj",
-				"textureUrl": "./textures/aqua_sparkle.png",
-				"avatarUrl": "./avatars/aqua_sparkle.png",
-				"scale": 1,
-				"caught": false
-			},
-			{
-				"id": 2,
-				"name": "Thạch Não Nhân",
-				"description": "Đại diện cho Ban Nội dung, được xem là 'bộ não' của CLB. Ban chịu trách nhiệm lên ý tưởng, xây dựng kịch bản và kế hoạch chi tiết cho các sự kiện. Tiểu ban Kỹ thuật trực thuộc cũng đảm bảo hệ thống âm thanh, ánh sáng luôn vận hành hoàn hảo. Nội dung chính là ban kiến tạo nên những chương trình thành công của YCC.",
-				"modelUrl": "./models/terra_golem.obj",
-				"textureUrl": "./textures/terra_golem.png",
-				"avatarUrl": "./avatars/terra_golem.png",
-				"scale": 1,
-				"caught": false
-			},
-			{
-				"id": 3,
-				"name": "Phong Sứ Giả",
-				"description": "Là biểu tượng của Ban Quan hệ Công chúng (PR), tiếng nói và gương mặt đại diện cho YCC. Ban có nhiệm vụ quản lý các kênh mạng xã hội, lan tỏa thông tin sự kiện, và xây dựng hình ảnh thân thiện, năng động của CLB đến với mọi người. PR chính là cầu nối đưa YCC đến gần hơn với cộng đồng.",
-				"modelUrl": "./models/sky_wing.obj",
-				"textureUrl": "./textures/sky_wing.png",
-				"avatarUrl": "./avatars/sky_wing.png",
-				"scale": 1,
-				"caught": false
-			},
-			{
-				"id": 4,
-				"name": "Lõi Nham Hậu Cần",
-				"description": "Tượng trưng cho Ban Tài chính - Hậu cần, nền tảng vững chắc cho mọi hoạt động. Ban quản lý 'ngân khố', chi tiêu và lo liệu tất cả công tác chuẩn bị từ A-Z như địa điểm, vật dụng... để các sự kiện diễn ra suôn sẻ. Đây là ban hỗ trợ thầm lặng nhưng không thể thiếu.",
-				"modelUrl": "./models/magma_crawler.obj",
-				"textureUrl": "./textures/magma_crawler.png",
-				"avatarUrl": "./avatars/magma_crawler.png",
-				"scale": 1,
-				"caught": false
-			},
-			{
-				"id": 5,
-				"name": "Mộc Linh Đối Ngoại",
-				"description": "Hiện thân của Ban Tài chính - Đối ngoại, những nhà ngoại giao tài năng của YCC. Ban có nhiệm vụ tìm kiếm, liên hệ và làm việc với các nhà tài trợ, các đối tác bên ngoài để mang về nguồn lực tài chính và những cơ hội hợp tác quý giá, giúp CLB ngày càng phát triển.",
-				"modelUrl": "./models/forest_sprite.obj",
-				"textureUrl": "./textures/forest_sprite.png",
-				"avatarUrl": "./avatars/forest_sprite.png",
-				"scale": 1,
-				"caught": false
-			}
-		];
+            {
+                id: 1,
+                name: "Aqua Sparkle",
+                description: "A playful creature from the deep, its scales shimmer with the light of the ocean.",
+                modelUrl: './models/aqua_sparkle.obj',
+                textureUrl: './textures/aqua_sparkle.png',
+                avatarUrl: './avatars/aqua_sparkle.png',
+                scale: 1,
+                caught: false
+            },
+            {
+                id: 2,
+                name: "Terra Golem",
+                description: "Formed from ancient rock and earth, this sturdy creature moves slowly but with immense power.",
+                modelUrl: './models/terra_golem.obj',
+                textureUrl: './textures/terra_golem.png',
+                avatarUrl: './avatars/terra_golem.png',
+                scale: 1,
+                caught: false
+            },
+            {
+                id: 3,
+                name: "Sky Wing",
+                description: "Graceful and swift, it soars on currents of wind, rarely touching the ground.",
+                modelUrl: './models/sky_wing.obj',
+                textureUrl: './textures/sky_wing.png',
+                avatarUrl: './avatars/sky_wing.png',
+                scale: 1,
+                caught: false
+            },
+            {
+                id: 4,
+                name: "Magma Crawler",
+                description: "Born in volcanic vents, its body radiates intense heat. Approach with caution.",
+                modelUrl: './models/magma_crawler.obj',
+                textureUrl: './textures/magma_crawler.png',
+                avatarUrl: './avatars/magma_crawler.png',
+                scale: 1,
+                caught: false
+            },
+            {
+                id: 5,
+                name: "Forest Sprite",
+                description: "A shy and elusive being, said to be the guardian of ancient forests. It blends with the leaves.",
+                modelUrl: './models/forest_sprite.obj',
+                textureUrl: './textures/forest_sprite.png',
+                avatarUrl: './avatars/forest_sprite.png',
+                scale: 1,
+                caught: false
+            }
+        ];
         let currentCreature = null;
         const loadedModels = {};
 
@@ -516,6 +516,12 @@
         let canThrow = true;
         let targetCaptured = false;
 
+        // Creature spawning system
+        let creatureSpawnTimer = null;
+        let creatureDisappearTimer = null;
+        let isCreatureActive = false;
+        let gameStartTime = null;
+
         let touchData = {
             startX: 0, startY: 0, endX: 0, endY: 0,
             startTime: 0, endTime: 0, isActive: false
@@ -541,6 +547,8 @@
                 e.preventDefault();
                 e.stopPropagation();
                 document.getElementById('welcome-modal').classList.add('hidden');
+                // Start the game timer when modal is closed
+                startGameTimer();
             });
 
             // Use click events with proper event handling for navigation
@@ -644,10 +652,12 @@
             directionalLight.position.set(5, 10, 7.5);
             scene.add(directionalLight);
 
-            createTarget();
             createBall();
             setupEventListeners();
             animate();
+            
+            // Don't automatically create target - wait for timer
+            updateDebug("Game ready! Đóng popup để bắt đầu.");
             
             setTimeout(() => {
                 instructionsPopup.style.opacity = '0';
@@ -918,6 +928,10 @@
         function capture() {
             isThrowing = false;
             targetCaptured = true;
+            
+            // Clear disappear timer since creature is caught
+            if (creatureDisappearTimer) clearTimeout(creatureDisappearTimer);
+            
             if (currentCreature) {
                 const creatureInDB = creatures.find(c => c.id === currentCreature.id);
                 if (creatureInDB) {
@@ -941,6 +955,7 @@
                 } else {
                     scene.remove(targetObject);
                     targetObject = null;
+                    isCreatureActive = false;
                     setTimeout(resetGame, 2000);
                 }
             }
@@ -957,9 +972,71 @@
             resetBall();
             targetCaptured = false;
             canThrow = true;
-            createTarget();
+            
+            // Don't immediately spawn new creature, wait for timer
             if (creatures.filter(c => !c.caught).length > 0) {
-                showMessage("🎯 New creature appeared!", 2000);
+                isCreatureActive = false;
+                updateDebug("Chờ YCCEMON tiếp theo xuất hiện...");
+                showMessage("YCCEMON sẽ xuất hiện ngẫu nhiên!", 2000);
+                scheduleNextCreature();
+            }
+        }
+
+        // Timer system for creature spawning
+        function startGameTimer() {
+            gameStartTime = Date.now();
+            updateDebug("Game bắt đầu! Chờ YCCEMON xuất hiện...");
+            showMessage("YCCEMON sẽ xuất hiện trong vài phút tới!", 3000);
+            scheduleNextCreature();
+        }
+
+        function scheduleNextCreature() {
+            // Clear existing timers
+            if (creatureSpawnTimer) clearTimeout(creatureSpawnTimer);
+            if (creatureDisappearTimer) clearTimeout(creatureDisappearTimer);
+            
+            // Random spawn time between 4-5 minutes (240,000 - 300,000 ms)
+            const spawnDelay = Math.random() * (300000 - 240000) + 240000;
+            
+            creatureSpawnTimer = setTimeout(() => {
+                if (creatures.filter(c => !c.caught).length > 0 && !isCreatureActive) {
+                    createTarget();
+                }
+            }, spawnDelay);
+            
+            // Update debug with countdown
+            updateDebugWithCountdown(spawnDelay);
+        }
+
+        function scheduleCreatureDisappear() {
+            // Clear existing disappear timer
+            if (creatureDisappearTimer) clearTimeout(creatureDisappearTimer);
+            
+            // Random disappear time between 2-3 minutes (120,000 - 180,000 ms)
+            const disappearDelay = Math.random() * (180000 - 120000) + 120000;
+            
+            creatureDisappearTimer = setTimeout(() => {
+                if (targetObject && isCreatureActive && !targetCaptured) {
+                    // Creature escapes
+                    scene.remove(targetObject);
+                    targetObject = null;
+                    isCreatureActive = false;
+                    showMessage(`${currentCreature ? currentCreature.name : 'YCCEMON'} đã trốn thoát!`, 3000);
+                    updateDebug("YCCEMON đã trốn thoát! Chờ con tiếp theo...");
+                    
+                    // Schedule next creature
+                    scheduleNextCreature();
+                }
+            }, disappearDelay);
+        }
+
+        function updateDebugWithCountdown(remainingTime) {
+            const minutes = Math.floor(remainingTime / 60000);
+            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            updateDebug(`YCCEMON tiếp theo trong: ${minutes}:${seconds.toString().padStart(2, '0')}`);
+            
+            if (remainingTime > 1000) {
+                setTimeout(() => updateDebugWithCountdown(remainingTime - 1000), 1000);
             }
         }
 

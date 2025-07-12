@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trọng Tài - Young Cybot 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-800 text-white">
+
+    <div class="container mx-auto p-4">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold text-yellow-400">BẢNG ĐIỀU KHIỂN TRỌNG TÀI</h1>
+            <p class="mt-2 text-gray-400">User ID: <span id="user-id-display">Đang tải...</span></p>
+        </header>
+
+        <!-- Match Controls -->
+        <section class="bg-gray-700 p-4 rounded-lg mb-6 shadow-lg">
+            <h2 class="text-xl font-bold mb-3 border-b border-gray-600 pb-2">Điều Khiển Trận Đấu</h2>
+            <div class="flex flex-wrap items-center gap-4">
+                <select id="match-selector" class="bg-gray-600 text-white p-2 rounded-lg w-full md:w-auto"></select>
+                <button id="btn-start-match" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-semibold">Bắt Đầu</button>
+                <button id="btn-pause-match" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg font-semibold">Tạm Dừng</button>
+                <button id="btn-end-match" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-semibold">Kết Thúc & Ghi Điểm</button>
+                <button id="btn-reset-match" class="bg-gray-500 hover:bg-gray-400 px-4 py-2 rounded-lg font-semibold">Reset Trận</button>
+            </div>
+            <div id="custom-match-setup" class="mt-4 hidden">
+                 <h3 class="font-semibold mb-2">Thiết lập trận tùy chỉnh</h3>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="custom-blue-1" placeholder="Tên đội Xanh 1" class="bg-gray-800 p-2 rounded">
+                    <input type="text" id="custom-red-1" placeholder="Tên đội Đỏ 1" class="bg-gray-800 p-2 rounded">
+                    <input type="text" id="custom-blue-2" placeholder="Tên đội Xanh 2" class="bg-gray-800 p-2 rounded">
+                    <input type="text" id="custom-red-2" placeholder="Tên đội Đỏ 2" class="bg-gray-800 p-2 rounded">
+                 </div>
+                 <button id="btn-set-custom-match" class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold">Xác Nhận Đội</button>
+            </div>
+        </section>
+
+        <!-- Scoring Controls -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Blue Alliance -->
+            <div class="bg-blue-900/50 border-2 border-blue-600 p-4 rounded-lg">
+                <h2 id="ref-blue-title" class="text-2xl font-bold text-center text-blue-300">LIÊN MINH XANH</h2>
+                <div class="space-y-4 mt-4">
+                    <!-- Scoring sections will be identical for both alliances -->
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Giai đoạn 1: Cờ Caro</p>
+                        <div class="flex justify-around mt-2" id="ref-blue-phase1">
+                            <button data-alliance="blue" data-phase="1" data-result="win" class="bg-gray-600 hover:bg-blue-500 px-3 py-1 rounded">Thắng</button>
+                            <button data-alliance="blue" data-phase="1" data-result="loss" class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded">Thua</button>
+                            <button data-alliance="blue" data-phase="1" data-result="draw" class="bg-gray-600 hover:bg-yellow-500 px-3 py-1 rounded">Hòa</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Giai đoạn 2: Đối Kháng</p>
+                        <div class="flex justify-around mt-2" id="ref-blue-phase2">
+                            <button data-alliance="blue" data-phase="2" data-result="win" class="bg-gray-600 hover:bg-blue-500 px-3 py-1 rounded">Thắng</button>
+                            <button data-alliance="blue" data-phase="2" data-result="loss" class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded">Thua</button>
+                            <button data-alliance="blue" data-phase="2" data-result="draw" class="bg-gray-600 hover:bg-yellow-500 px-3 py-1 rounded">Hòa</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Giai đoạn 3: Xếp Hình</p>
+                        <div class="flex justify-around mt-2" id="ref-blue-phase3">
+                            <button data-alliance="blue" data-phase="3" data-result="win" class="bg-gray-600 hover:bg-blue-500 px-3 py-1 rounded">Thắng</button>
+                            <button data-alliance="blue" data-phase="3" data-result="loss" class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded">Thua</button>
+                            <button data-alliance="blue" data-phase="3" data-result="draw" class="bg-gray-600 hover:bg-yellow-500 px-3 py-1 rounded">Hòa</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Hình Phạt (Gây ra bởi Xanh)</p>
+                        <div class="flex justify-around mt-2">
+                            <button onclick="addPenalty('blue', 1)" class="bg-yellow-600 hover:bg-yellow-500 px-3 py-1 rounded">+1 cho Đỏ</button>
+                            <button onclick="addPenalty('blue', 5)" class="bg-orange-600 hover:bg-orange-500 px-3 py-1 rounded">+5 cho Đỏ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Red Alliance -->
+            <div class="bg-red-900/50 border-2 border-red-600 p-4 rounded-lg">
+                <h2 id="ref-red-title" class="text-2xl font-bold text-center text-red-300">LIÊN MINH ĐỎ</h2>
+                <div class="space-y-4 mt-4">
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Giai đoạn 1: Cờ Caro</p>
+                        <div class="flex justify-around mt-2" id="ref-red-phase1">
+                            <button data-alliance="red" data-phase="1" data-result="win" class="bg-gray-600 hover:bg-red-500 px-3 py-1 rounded">Thắng</button>
+                            <button data-alliance="red" data-phase="1" data-result="loss" class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded">Thua</button>
+                            <button data-alliance="red" data-phase="1" data-result="draw" class="bg-gray-600 hover:bg-yellow-500 px-3 py-1 rounded">Hòa</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Giai đoạn 2: Đối Kháng</p>
+                        <div class="flex justify-around mt-2" id="ref-red-phase2">
+                            <button data-alliance="red" data-phase="2" data-result="win" class="bg-gray-600 hover:bg-red-500 px-3 py-1 rounded">Thắng</button>
+                            <button data-alliance="red" data-phase="2" data-result="loss" class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded">Thua</button>
+                            <button data-alliance="red" data-phase="2" data-result="draw" class="bg-gray-600 hover:bg-yellow-500 px-3 py-1 rounded">Hòa</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Giai đoạn 3: Xếp Hình</p>
+                        <div class="flex justify-around mt-2" id="ref-red-phase3">
+                            <button data-alliance="red" data-phase="3" data-result="win" class="bg-gray-600 hover:bg-red-500 px-3 py-1 rounded">Thắng</button>
+                            <button data-alliance="red" data-phase="3" data-result="loss" class="bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded">Thua</button>
+                            <button data-alliance="red" data-phase="3" data-result="draw" class="bg-gray-600 hover:bg-yellow-500 px-3 py-1 rounded">Hòa</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded-lg">
+                        <p class="font-semibold">Hình Phạt (Gây ra bởi Đỏ)</p>
+                        <div class="flex justify-around mt-2">
+                            <button onclick="addPenalty('red', 1)" class="bg-yellow-600 hover:bg-yellow-500 px-3 py-1 rounded">+1 cho Xanh</button>
+                            <button onclick="addPenalty('red', 5)" class="bg-orange-600 hover:bg-orange-500 px-3 py-1 rounded">+5 cho Xanh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manual Rankings Editor -->
+        <section class="bg-gray-700 p-4 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-3 border-b border-gray-600 pb-2">Chỉnh Sửa Bảng Xếp Hạng (Thủ Công)</h2>
+            <div id="rankings-editor" class="space-y-2">
+                <!-- Editor rows will be populated by JS -->
+                <p>Đang tải trình chỉnh sửa...</p>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-4">
+                <button id="btn-save-rankings" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-semibold">Lưu Bảng Xếp Hạng</button>
+                <button id="btn-init-db" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg font-semibold">Khởi Tạo/Reset Toàn Bộ Giải Đấu</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- CONFIGURATION ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'young-cybot-2025';
+
+        const TEAMS = ['2rolasockeo', 'WINX', 'Automobili...', 'Illit', 'GED', 'Nổ Hũ Giấy Cuối'];
+        const QUALIFICATION_SCHEDULE = [
+            { match: 1, blue: ['2rolasockeo', 'WINX'], red: ['Automobili...', 'Illit'] },
+            { match: 2, blue: ['GED', 'Nổ Hũ Giấy Cuối'], red: ['2rolasockeo', 'Automobili...'] },
+            { match: 3, blue: ['WINX', 'Illit'], red: ['GED', '2rolasockeo'] },
+            { match: 4, blue: ['Automobili...', 'Nổ Hũ Giấy Cuối'], red: ['WINX', 'GED'] },
+            { match: 5, blue: ['Illit', 'Nổ Hũ Giấy Cuối'], red: ['Automobili...', 'GED'] },
+            { match: 6, blue: ['2rolasockeo', 'Illit'], red: ['WINX', 'Nổ Hũ Giấy Cuối'] },
+            { match: 7, blue: ['WINX', 'Illit'], red: ['2rolasockeo', 'Automobili...'] },
+            { match: 8, blue: ['Illit', 'GED'], red: ['WINX', 'Automobili...'] },
+            { match: 9, blue: ['2rolasockeo', 'Nổ Hũ Giấy Cuối'], red: ['WINX', 'GED'] },
+            { match: 10, blue: ['Automobili...', 'Illit'], red: ['GED', 'Nổ Hũ Giấy Cuối'] },
+            { match: 11, blue: ['2rolasockeo', 'WINX'], red: ['Automobili...', 'Nổ Hũ Giấy Cuối'] },
+            { match: 12, blue: ['Illit', 'Nổ Hũ Giấy Cuối'], red: ['2rolasockeo', 'GED'] },
+        ];
+        const MATCH_DURATION = 360;
+
+        // --- FIREBASE & STATE ---
+        let db, auth, userId, currentMatchState = {}, refereeSelection = { blue: {}, red: {} };
+        
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    document.getElementById('user-id-display').textContent = userId;
+                    initializeAppLogic();
+                } else {
+                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                }
+            });
+        } catch(e) { console.error(e); }
+
+        // --- DATABASE PATHS ---
+        const matchStateRef = () => doc(db, `artifacts/${appId}/public/data/matchState/current`);
+        const rankingsRef = () => doc(db, `artifacts/${appId}/public/data/rankings/allTeams`);
+
+        // --- INITIALIZATION ---
+        function initializeAppLogic() {
+            populateMatchSelector();
+            setupListeners();
+            loadRankingsEditor();
+            listenToMatchState();
+        }
+
+        function populateMatchSelector() {
+            const selector = document.getElementById('match-selector');
+            selector.innerHTML = '<option value="custom">-- Trận Tùy Chỉnh --</option>';
+            QUALIFICATION_SCHEDULE.forEach(m => {
+                selector.innerHTML += `<option value="${m.match}">Vòng Loại - Trận ${m.match}</option>`;
+            });
+        }
+
+        function setupListeners() {
+            document.getElementById('match-selector').addEventListener('change', handleMatchSelection);
+            document.getElementById('btn-init-db').addEventListener('click', initializeDatabase);
+            document.getElementById('btn-reset-match').addEventListener('click', resetCurrentMatch);
+            document.getElementById('btn-start-match').addEventListener('click', startMatch);
+            document.getElementById('btn-pause-match').addEventListener('click', pauseMatch);
+            document.getElementById('btn-end-match').addEventListener('click', endAndScoreMatch);
+            document.getElementById('btn-save-rankings').addEventListener('click', saveRankings);
+            document.getElementById('btn-set-custom-match').addEventListener('click', setCustomMatch);
+
+            document.querySelectorAll('button[data-alliance]').forEach(button => {
+                button.addEventListener('click', handlePhaseResultSelection);
+            });
+        }
+        
+        function listenToMatchState() {
+            onSnapshot(matchStateRef(), (doc) => {
+                if (doc.exists()) {
+                    currentMatchState = doc.data();
+                    updateRefereeUI(currentMatchState);
+                }
+            });
+        }
+
+        // --- UI UPDATES ---
+        function updateRefereeUI(state) {
+            document.getElementById('ref-blue-title').textContent = `LIÊN MINH XANH (${state.blue?.teams?.join(' + ') || '...'})`;
+            document.getElementById('ref-red-title').textContent = `LIÊN MINH ĐỎ (${state.red?.teams?.join(' + ') || '...'})`;
+        }
+        
+        function updateRefereeButtonStyles() {
+            document.querySelectorAll('button[data-alliance]').forEach(button => {
+                const { alliance, phase, result } = button.dataset;
+                const selection = refereeSelection[alliance]?.[`phase${phase}`];
+                button.classList.remove('bg-blue-500', 'bg-red-500', 'bg-yellow-500', 'ring-2', 'ring-white');
+                button.classList.add('bg-gray-600');
+                if (selection === result) {
+                    const color = result === 'win' ? (alliance === 'blue' ? 'bg-blue-500' : 'bg-red-500') : 'bg-yellow-500';
+                    button.classList.remove('bg-gray-600');
+                    button.classList.add(color, 'ring-2', 'ring-white');
+                }
+            });
+        }
+
+        // --- MATCH CONTROL LOGIC ---
+        async function handleMatchSelection() {
+            const selector = document.getElementById('match-selector');
+            const customSetupDiv = document.getElementById('custom-match-setup');
+            if (selector.value === 'custom') {
+                customSetupDiv.classList.remove('hidden');
+                return;
+            }
+            customSetupDiv.classList.add('hidden');
+            
+            const matchInfo = QUALIFICATION_SCHEDULE.find(m => m.match == selector.value);
+            if (matchInfo) {
+                const matchTitle = selector.options[selector.selectedIndex].text;
+                const newState = createInitialMatchState(matchTitle, matchInfo.blue, matchInfo.red);
+                await setDoc(matchStateRef(), newState);
+                resetRefereeSelection();
+            }
+        }
+
+        async function setCustomMatch() {
+            const blue1 = document.getElementById('custom-blue-1').value || "Xanh 1";
+            const blue2 = document.getElementById('custom-blue-2').value || "Xanh 2";
+            const red1 = document.getElementById('custom-red-1').value || "Đỏ 1";
+            const red2 = document.getElementById('custom-red-2').value || "Đỏ 2";
+            const newState = createInitialMatchState("Trận Tùy Chỉnh", [blue1, blue2], [red1, red2]);
+            await setDoc(matchStateRef(), newState);
+            resetRefereeSelection();
+        }
+
+        window.addPenalty = async (penalizedAlliance, points) => {
+            const state = (await getDoc(matchStateRef())).data();
+            const allianceToUpdate = state[penalizedAlliance];
+            allianceToUpdate.penalties = (allianceToUpdate.penalties || 0) + points;
+            await setDoc(matchStateRef(), { [penalizedAlliance]: allianceToUpdate }, { merge: true });
+        };
+        
+        function handlePhaseResultSelection(event) {
+            const { alliance, phase, result } = event.target.dataset;
+            const oppositeAlliance = alliance === 'blue' ? 'red' : 'blue';
+            refereeSelection[alliance] = refereeSelection[alliance] || {};
+            refereeSelection[oppositeAlliance] = refereeSelection[oppositeAlliance] || {};
+            
+            refereeSelection[alliance][`phase${phase}`] = result;
+            if (result === 'win') refereeSelection[oppositeAlliance][`phase${phase}`] = 'loss';
+            else if (result === 'loss') refereeSelection[oppositeAlliance][`phase${phase}`] = 'win';
+            else if (result === 'draw') refereeSelection[oppositeAlliance][`phase${phase}`] = 'draw';
+            
+            updateRefereeButtonStyles();
+        }
+
+        async function startMatch() {
+            if (['KẾT THÚC', 'ĐÃ GHI ĐIỂM'].includes(currentMatchState.status)) return alert("Trận đã kết thúc.");
+            await setDoc(matchStateRef(), { status: 'ĐANG DIỄN RA', timeRemaining: currentMatchState.timeRemaining > 0 ? currentMatchState.timeRemaining : MATCH_DURATION }, { merge: true });
+        }
+
+        async function pauseMatch() {
+            await setDoc(matchStateRef(), { status: 'TẠM DỪNG' }, { merge: true });
+        }
+
+        async function endAndScoreMatch() {
+            if (['KẾT THÚC', 'ĐÃ GHI ĐIỂM'].includes(currentMatchState.status)) return alert("Điểm đã được ghi.");
+            
+            const blueScores = calculatePhaseScores(refereeSelection.blue);
+            const redScores = calculatePhaseScores(refereeSelection.red);
+
+            const finalState = { ...currentMatchState };
+            finalState.status = 'KẾT THÚC';
+            finalState.timeRemaining = 0;
+            finalState.blue = { ...finalState.blue, ...blueScores };
+            finalState.red = { ...finalState.red, ...redScores };
+            
+            finalState.blue.totalScore = finalState.blue.phase1Score + finalState.blue.phase2Score + finalState.blue.phase3Score + (finalState.red.penalties || 0);
+            finalState.red.totalScore = finalState.red.phase1Score + finalState.red.phase2Score + finalState.red.phase3Score + (finalState.blue.penalties || 0);
+
+            await setDoc(matchStateRef(), finalState);
+            alert("Đã ghi điểm. Vui lòng cập nhật bảng xếp hạng thủ công nếu cần.");
+        }
+
+        function calculatePhaseScores(selection) {
+            const scores = { phase1Score: 0, phase2Score: 0, phase3Score: 0 };
+            if (selection?.phase1 === 'win') scores.phase1Score = 10; else if (selection?.phase1 === 'draw') scores.phase1Score = 5;
+            if (selection?.phase2 === 'win') scores.phase2Score = 10; else if (selection?.phase2 === 'draw') scores.phase2Score = 5;
+            if (selection?.phase3 === 'win') scores.phase3Score = 20; else if (selection?.phase3 === 'draw' || selection?.phase3 === 'loss') scores.phase3Score = 10;
+            return scores;
+        }
+
+        // --- RANKINGS EDITOR LOGIC ---
+        async function loadRankingsEditor() {
+            const editorDiv = document.getElementById('rankings-editor');
+            try {
+                const docSnap = await getDoc(rankingsRef());
+                if (!docSnap.exists() || !docSnap.data().teams) {
+                     editorDiv.innerHTML = '<p>Chưa có dữ liệu xếp hạng. Vui lòng "Khởi Tạo/Reset".</p>';
+                     return;
+                }
+                const teams = docSnap.data().teams;
+                let editorHtml = `
+                    <div class="grid grid-cols-6 gap-2 font-bold text-gray-300">
+                        <span>Hạng</span><span>Tên Đội</span><span>Số Trận</span><span>Thắng</span><span>Thua</span><span>Hòa</span>
+                    </div>`;
+                teams.forEach((team, index) => {
+                    editorHtml += `
+                        <div class="grid grid-cols-6 gap-2 items-center" data-team-index="${index}">
+                            <input type="number" value="${index + 1}" class="bg-gray-800 p-1 rounded rank-input">
+                            <input type="text" value="${team.name}" class="bg-gray-800 p-1 rounded name-input">
+                            <input type="number" value="${team.matchesPlayed}" class="bg-gray-800 p-1 rounded matches-input">
+                            <input type="number" value="${team.wins}" class="bg-gray-800 p-1 rounded wins-input">
+                            <input type="number" value="${team.losses}" class="bg-gray-800 p-1 rounded losses-input">
+                            <input type="number" value="${team.ties}" class="bg-gray-800 p-1 rounded ties-input">
+                        </div>`;
+                });
+                editorDiv.innerHTML = editorHtml;
+            } catch (error) {
+                console.error("Error loading rankings editor:", error);
+                editorDiv.innerHTML = '<p class="text-red-500">Lỗi tải trình chỉnh sửa.</p>';
+            }
+        }
+
+        async function saveRankings() {
+            const editorDiv = document.getElementById('rankings-editor');
+            const teamRows = editorDiv.querySelectorAll('[data-team-index]');
+            let teamsData = [];
+            teamRows.forEach(row => {
+                teamsData.push({
+                    rank: parseInt(row.querySelector('.rank-input').value, 10),
+                    name: row.querySelector('.name-input').value,
+                    matchesPlayed: parseInt(row.querySelector('.matches-input').value, 10),
+                    wins: parseInt(row.querySelector('.wins-input').value, 10),
+                    losses: parseInt(row.querySelector('.losses-input').value, 10),
+                    ties: parseInt(row.querySelector('.ties-input').value, 10),
+                });
+            });
+            
+            // Sort by the rank input field before saving
+            teamsData.sort((a, b) => a.rank - b.rank);
+
+            try {
+                await setDoc(rankingsRef(), { teams: teamsData });
+                alert("Đã lưu bảng xếp hạng thành công!");
+            } catch (error) {
+                console.error("Error saving rankings:", error);
+                alert("Lỗi khi lưu bảng xếp hạng.");
+            }
+        }
+
+
+        // --- DATABASE INITIALIZATION & RESET ---
+        async function initializeDatabase() {
+            if (!confirm("CẢNH BÁO: Hành động này sẽ reset TOÀN BỘ dữ liệu giải đấu, bao gồm cả bảng xếp hạng và trận đấu hiện tại. Bạn có chắc chắn?")) return;
+            
+            const batch = writeBatch(db);
+            
+            // Reset rankings
+            const initialRankings = TEAMS.map((name, index) => ({
+                rank: index + 1, name, matchesPlayed: 0, wins: 0, losses: 0, ties: 0
+            }));
+            batch.set(rankingsRef(), { teams: initialRankings });
+
+            // Reset current match
+            const initialMatchState = createInitialMatchState("--", ["--", "--"], ["--", "--"]);
+            batch.set(matchStateRef(), initialMatchState);
+
+            await batch.commit();
+            alert("Đã reset toàn bộ giải đấu!");
+            loadRankingsEditor();
+            resetRefereeSelection();
+        }
+        
+        async function resetCurrentMatch() {
+            if (!confirm("Bạn có chắc muốn reset lại điểm số của trận hiện tại?")) return;
+            const state = (await getDoc(matchStateRef())).data();
+            const newState = createInitialMatchState(state.matchTitle, state.blue.teams, state.red.teams);
+            await setDoc(matchStateRef(), newState);
+            resetRefereeSelection();
+            alert("Đã reset trận hiện tại.");
+        }
+
+        function createInitialMatchState(title, blueTeams, redTeams) {
+            return {
+                matchTitle: title, status: 'CHUẨN BỊ', timeRemaining: MATCH_DURATION,
+                blue: { teams: blueTeams, phase1Score: 0, phase2Score: 0, phase3Score: 0, penalties: 0, totalScore: 0 },
+                red: { teams: redTeams, phase1Score: 0, phase2Score: 0, phase3Score: 0, penalties: 0, totalScore: 0 }
+            };
+        }
+        
+        function resetRefereeSelection() {
+            refereeSelection = { blue: {}, red: {} };
+            updateRefereeButtonStyles();
+        }
+
+    </script>
+</body>
+</html>

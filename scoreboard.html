@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điểm - Young Cybot 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e7eb;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .text-shadow-strong { text-shadow: 3px 3px 6px rgba(0,0,0,0.7); }
+        .score-pulse { animation: pulse-animation 1s ease-in-out; }
+        @keyframes pulse-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .bg-grid {
+             background-image: linear-gradient(rgba(255, 255, 255, 0.07) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.07) 2px, transparent 2px);
+             background-size: 50px 50px;
+        }
+    </style>
+</head>
+<body class="bg-grid">
+
+    <div class="min-h-screen flex flex-col p-4 md:p-6">
+        <header class="text-center mb-4">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-yellow-400 uppercase tracking-wider">Young Cybot 2025</h1>
+            <p id="scoreboard-match-title" class="text-2xl md:text-3xl text-gray-300 mt-1 font-semibold">--</p>
+        </header>
+
+        <main class="flex-grow grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+            <!-- Blue Alliance -->
+            <div class="md:col-span-5 bg-blue-900/80 backdrop-blur-sm border-4 border-blue-500 rounded-2xl p-6 flex flex-col justify-between h-full shadow-2xl shadow-blue-500/20">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-center text-blue-300 uppercase">Liên Minh Xanh</h2>
+                    <div id="scoreboard-blue-teams" class="text-center text-xl md:text-2xl mt-2 text-blue-200 h-14 font-medium">--</div>
+                </div>
+                <div class="text-center my-8">
+                    <span id="scoreboard-blue-total" class="text-8xl md:text-9xl lg:text-[10rem] font-black text-white text-shadow-strong transition-all duration-300">0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-blue-950/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-blue-300">GĐ 1: Cờ Caro</p>
+                        <p id="scoreboard-blue-phase1" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                    <div class="bg-blue-950/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-blue-300">GĐ 2: Đối Kháng</p>
+                        <p id="scoreboard-blue-phase2" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                    <div class="bg-blue-950/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-blue-300">GĐ 3: Xếp Hình</p>
+                        <p id="scoreboard-blue-phase3" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                    <div class="bg-green-900/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-green-300">Điểm Phạt</p>
+                        <p id="scoreboard-blue-penalties" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timer & Status -->
+            <div class="md:col-span-1 flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-900/80 backdrop-blur-sm border-2 border-gray-600 p-4 rounded-2xl w-full shadow-lg">
+                    <p class="text-lg font-medium text-gray-400">THỜI GIAN</p>
+                    <p id="scoreboard-timer" class="text-6xl font-mono font-bold text-white">06:00</p>
+                    <p id="scoreboard-match-status" class="mt-2 text-xl font-semibold text-yellow-400 h-7">CHUẨN BỊ</p>
+                </div>
+            </div>
+
+            <!-- Red Alliance -->
+            <div class="md:col-span-5 bg-red-900/80 backdrop-blur-sm border-4 border-red-500 rounded-2xl p-6 flex flex-col justify-between h-full shadow-2xl shadow-red-500/20">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-center text-red-300 uppercase">Liên Minh Đỏ</h2>
+                    <div id="scoreboard-red-teams" class="text-center text-xl md:text-2xl mt-2 text-red-200 h-14 font-medium">--</div>
+                </div>
+                <div class="text-center my-8">
+                    <span id="scoreboard-red-total" class="text-8xl md:text-9xl lg:text-[10rem] font-black text-white text-shadow-strong transition-all duration-300">0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-red-950/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-red-300">GĐ 1: Cờ Caro</p>
+                        <p id="scoreboard-red-phase1" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                    <div class="bg-red-950/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-red-300">GĐ 2: Đối Kháng</p>
+                        <p id="scoreboard-red-phase2" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                    <div class="bg-red-950/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-red-300">GĐ 3: Xếp Hình</p>
+                        <p id="scoreboard-red-phase3" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                    <div class="bg-green-900/70 p-3 rounded-lg">
+                        <p class="text-sm md:text-base text-green-300">Điểm Phạt</p>
+                        <p id="scoreboard-red-penalties" class="text-2xl md:text-3xl font-bold">0</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- CONFIGURATION ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'young-cybot-2025';
+
+        // --- FIREBASE INITIALIZATION ---
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            const auth = getAuth(app);
+            
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } else {
+                    console.log("Scoreboard user signed in:", user.uid);
+                    listenToMatchState();
+                }
+            });
+        } catch (e) {
+            console.error("Firebase initialization failed:", e);
+            document.body.innerHTML = '<div class="text-red-500 text-center p-8">Lỗi kết nối cơ sở dữ liệu.</div>';
+        }
+
+        // --- DOM ELEMENTS ---
+        const elements = {
+            matchTitle: document.getElementById('scoreboard-match-title'),
+            matchStatus: document.getElementById('scoreboard-match-status'),
+            timer: document.getElementById('scoreboard-timer'),
+            blue: {
+                teams: document.getElementById('scoreboard-blue-teams'),
+                total: document.getElementById('scoreboard-blue-total'),
+                phase1: document.getElementById('scoreboard-blue-phase1'),
+                phase2: document.getElementById('scoreboard-blue-phase2'),
+                phase3: document.getElementById('scoreboard-blue-phase3'),
+                penalties: document.getElementById('scoreboard-blue-penalties'),
+            },
+            red: {
+                teams: document.getElementById('scoreboard-red-teams'),
+                total: document.getElementById('scoreboard-red-total'),
+                phase1: document.getElementById('scoreboard-red-phase1'),
+                phase2: document.getElementById('scoreboard-red-phase2'),
+                phase3: document.getElementById('scoreboard-red-phase3'),
+                penalties: document.getElementById('scoreboard-red-penalties'),
+            }
+        };
+        
+        let lastState = {};
+
+        // --- REALTIME LISTENER ---
+        function listenToMatchState() {
+            const matchStateRef = doc(db, `artifacts/${appId}/public/data/matchState/current`);
+            onSnapshot(matchStateRef, (doc) => {
+                if (doc.exists()) {
+                    const state = doc.data();
+                    updateScoreboardUI(state);
+                    lastState = state;
+                } else {
+                    console.log("No current match state found.");
+                }
+            }, (error) => {
+                console.error("Error listening to match state:", error);
+            });
+        }
+
+        // --- UI UPDATE FUNCTION ---
+        function updateScoreboardUI(state) {
+            elements.matchTitle.textContent = state.matchTitle || '--';
+            elements.matchStatus.textContent = state.status || 'CHUẨN BỊ';
+
+            const minutes = Math.floor(state.timeRemaining / 60).toString().padStart(2, '0');
+            const seconds = (state.timeRemaining % 60).toString().padStart(2, '0');
+            elements.timer.textContent = `${minutes}:${seconds}`;
+
+            // Update Blue Alliance
+            updateAllianceUI('blue', state.blue, state.red?.penalties || 0);
+
+            // Update Red Alliance
+            updateAllianceUI('red', state.red, state.blue?.penalties || 0);
+        }
+
+        function updateAllianceUI(alliance, allianceState, opponentPenalties) {
+            const el = elements[alliance];
+            const lastAllianceState = lastState[alliance] || {};
+            
+            el.teams.textContent = allianceState?.teams?.join(' + ') || '--';
+            
+            // Update scores and add pulse animation on change
+            updateScoreField(el.phase1, allianceState?.phase1Score, lastAllianceState.phase1Score);
+            updateScoreField(el.phase2, allianceState?.phase2Score, lastAllianceState.phase2Score);
+            updateScoreField(el.phase3, allianceState?.phase3Score, lastAllianceState.phase3Score);
+            updateScoreField(el.penalties, opponentPenalties, (alliance === 'blue' ? lastState.red?.penalties : lastState.blue?.penalties) || 0);
+            updateScoreField(el.total, allianceState?.totalScore, lastAllianceState.totalScore);
+        }
+        
+        function updateScoreField(element, newValue, oldValue) {
+            const value = newValue || 0;
+            if (element.textContent != value) {
+                element.textContent = value;
+                element.classList.add('score-pulse');
+                // Remove class after animation ends to allow re-triggering
+                setTimeout(() => element.classList.remove('score-pulse'), 1000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Xếp Hạng - Young Cybot 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #e5e7eb;
+            overflow: hidden;
+        }
+        .table-container {
+            height: 80vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .table-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, #111827, transparent);
+            pointer-events: none;
+        }
+        .scrolling-tbody {
+            animation: scroll-up 20s linear infinite;
+        }
+        @keyframes scroll-up {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col items-center justify-center min-h-screen p-4 md:p-8">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-yellow-400 uppercase tracking-wider">Bảng Xếp Hạng</h1>
+        </header>
+        <div class="w-full max-w-6xl bg-gray-800/50 rounded-lg shadow-2xl table-container">
+            <table class="w-full text-left">
+                <thead class="bg-gray-900 text-gray-300 uppercase text-sm sticky top-0 z-10">
+                    <tr>
+                        <th class="p-4 w-16">Hạng</th>
+                        <th class="p-4">Tên Đội</th>
+                        <th class="p-4 text-center">Số Trận</th>
+                        <th class="p-4 text-center">Thắng</th>
+                        <th class="p-4 text-center">Thua</th>
+                        <th class="p-4 text-center">Hòa</th>
+                    </tr>
+                </thead>
+            </table>
+             <div class="h-full overflow-hidden">
+                <table class="w-full text-left">
+                    <!-- Fake head for spacing -->
+                    <thead class="bg-gray-900 text-gray-300 uppercase text-sm invisible">
+                         <tr>
+                            <th class="p-4 w-16">Hạng</th>
+                            <th class="p-4">Tên Đội</th>
+                            <th class="p-4 text-center">Số Trận</th>
+                            <th class="p-4 text-center">Thắng</th>
+                            <th class="p-4 text-center">Thua</th>
+                            <th class="p-4 text-center">Hòa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankings-table-body" class="divide-y divide-gray-700">
+                        <!-- Rows will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- CONFIGURATION ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'young-cybot-2025';
+
+        // --- FIREBASE INITIALIZATION ---
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            const auth = getAuth(app);
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } else {
+                     console.log("Rankings user signed in:", user.uid);
+                     listenToRankings();
+                }
+            });
+        } catch (e) { console.error(e); }
+
+        const tableBody = document.getElementById('rankings-table-body');
+
+        function listenToRankings() {
+            const rankingsRef = doc(db, `artifacts/${appId}/public/data/rankings/allTeams`);
+            onSnapshot(rankingsRef, (doc) => {
+                if (doc.exists() && doc.data().teams) {
+                    updateRankingsTable(doc.data().teams);
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-8">Chưa có dữ liệu xếp hạng.</td></tr>';
+                }
+            });
+        }
+
+        function updateRankingsTable(teams) {
+            // Sort by rank field
+            teams.sort((a,b) => a.rank - b.rank);
+
+            let tableHtml = '';
+            teams.forEach(team => {
+                tableHtml += `
+                    <tr class="text-lg">
+                        <td class="p-4 font-bold text-center w-16">${team.rank}</td>
+                        <td class="p-4 font-semibold">${team.name}</td>
+                        <td class="p-4 text-center">${team.matchesPlayed}</td>
+                        <td class="p-4 text-center text-green-400 font-medium">${team.wins}</td>
+                        <td class="p-4 text-center text-red-400 font-medium">${team.losses}</td>
+                        <td class="p-4 text-center text-yellow-400 font-medium">${team.ties}</td>
+                    </tr>
+                `;
+            });
+
+            // For the infinite scroll effect, duplicate the content
+            tableBody.innerHTML = tableHtml + tableHtml;
+            
+            // Add/remove scrolling class based on content height
+            if (tableBody.offsetHeight > tableBody.parentElement.offsetHeight) {
+                 tableBody.classList.add('scrolling-tbody');
+            } else {
+                 tableBody.classList.remove('scrolling-tbody');
+            }
+        }
+    </script>
+</body>
+</html>

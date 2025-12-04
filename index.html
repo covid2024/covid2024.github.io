@@ -3,424 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tổng Hợp Polymer & Giải Đề HSG Hóa 12 (Hải Dương)</title>
+    <title>Tổng Hợp Phương Trình Điều Chế Polime</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        :root {
-            --primary-color: #0056b3; /* Xanh đậm */
-            --secondary-color: #008080; /* Xanh ngọc */
-            --accent-color: #e74c3c; /* Đỏ cam cho đáp án */
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --border-color: #ddd;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
             margin: 0;
             padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
         }
-
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: var(--card-bg);
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        /* Typography */
         h1 {
             text-align: center;
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--secondary-color);
-            padding-bottom: 15px;
-            margin-bottom: 40px;
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            margin-top: 50px;
-            border-left: 5px solid var(--primary-color);
-            padding-left: 15px;
-            background-color: #eefbff;
-            padding-top: 10px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
         }
-
-        h3 {
-            color: #444;
+        h2 {
+            color: #e74c3c;
             margin-top: 30px;
-            font-weight: 600;
+            border-left: 5px solid #e74c3c;
+            padding-left: 10px;
+            background-color: #fff0f0;
         }
-
-        /* Tables */
-        .table-responsive {
-            overflow-x: auto;
-            margin-bottom: 30px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
+            margin-top: 15px;
         }
-
         th, td {
-            padding: 12px 15px;
+            border: 1px solid #ddd;
+            padding: 12px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
         }
-
         th {
-            background-color: var(--primary-color);
+            background-color: #2980b9;
             color: white;
-            white-space: nowrap;
+            width: 30%;
         }
-
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
         tr:hover {
             background-color: #f1f1f1;
         }
-
-        /* Formulas */
-        .chem {
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            color: #c0392b;
-        }
-
-        /* Exam Section Styles */
-        .exam-intro {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .question-block {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            background-color: #fff;
-            transition: box-shadow 0.3s;
-        }
-
-        .question-block:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .q-title {
-            font-weight: bold;
-            color: var(--primary-color);
+        .equation {
             font-size: 1.1em;
-            margin-bottom: 10px;
+            overflow-x: auto;
         }
-
-        .q-analysis {
+        .note {
             font-style: italic;
-            color: #555;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-left: 3px solid #ccc;
-            margin: 10px 0;
-        }
-
-        .q-answer {
-            font-weight: bold;
-            color: var(--accent-color);
-            margin-top: 10px;
-            display: inline-block;
-            background-color: #ffe6e6;
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-
-        .reaction-box {
-            background-color: #e8f4fd;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 10px;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* Utility */
-        .highlight {
-            color: red;
-            font-weight: bold;
-        }
-
-        .toc {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 40px;
-        }
-        .toc ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .toc a {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-        .toc a:hover {
-            text-decoration: underline;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Tài Liệu Hóa Học Chuyên Sâu</h1>
+    <h1>TỔNG HỢP PHƯƠNG TRÌNH ĐIỀU CHẾ POLIME</h1>
+    <p><em>Lưu ý: Trong phản ứng, các điều kiện xúc tác, nhiệt độ, áp suất viết tắt là \(xt, t^\circ, p\).</em></p>
 
-    <div class="toc">
-        <h3>Mục Lục</h3>
-        <ul>
-            <li><a href="#part1">PHẦN 1: Danh Sách Tổng Hợp >30 Chất Polymer</a></li>
-            <li><a href="#part2">PHẦN 2: Giải Chi Tiết Đề Thi HSG Hóa 12 (Hải Dương - Mã 201)</a></li>
-        </ul>
-    </div>
+    <h2>1. Nhóm Chất dẻo (Plastics)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tên Polime</th>
+                <th>Phương trình phản ứng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. Polietilen (PE)</strong><br>Trùng hợp Etilen</td>
+                <td class="equation">$$nCH_2=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-CH_2-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>2. Polipropilen (PP)</strong><br>Trùng hợp Propilen</td>
+                <td class="equation">$$nCH_2=CH-CH_3 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad CH_3 \end{pmatrix}_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>3. Polistiren (PS)</strong><br>Trùng hợp Stiren</td>
+                <td class="equation">$$nCH_2=CH-C_6H_5 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad C_6H_5 \end{pmatrix}_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>4. Polivinyl clorua (PVC)</strong><br>Trùng hợp Vinyl clorua</td>
+                <td class="equation">$$nCH_2=CH-Cl \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad Cl \end{pmatrix}_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>5. Polivinyl axetat (PVA)</strong><br>Trùng hợp Vinyl axetat</td>
+                <td class="equation">$$nCH_3COOCH=CH_2 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad OOCCH_3 \end{pmatrix}_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>6. Polimetyl metacrylat</strong><br>(Thủy tinh hữu cơ - Plexiglas)</td>
+                <td class="equation">$$nCH_2=C(CH_3)COOCH_3 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-C(CH_3)- \\ \quad | \\ \quad COOCH_3 \end{pmatrix}_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>7. Poli phenol-fomanđehit (PPF)</strong><br>Nhựa Novolac/Rezol</td>
+                <td class="equation">
+                    <span class="note">Trùng ngưng Phenol & Fomanđehit (tạo mắt xích cơ bản):</span>
+                    $$nC_6H_5OH + nHCHO \xrightarrow{H^+, t^\circ} (-(OH)C_6H_3-CH_2-)_n + nH_2O$$
+                </td>
+            </tr>
+            <tr>
+                <td><strong>8. Teflon</strong><br>Politetrafloetilen</td>
+                <td class="equation">$$nCF_2=CF_2 \xrightarrow{t^\circ, p, xt} (-CF_2-CF_2-)_n$$</td>
+            </tr>
+        </tbody>
+    </table>
 
-    <div id="part1">
-        <h2>PHẦN 1: DANH SÁCH TỔNG HỢP CÁC CHẤT POLYMER</h2>
-        <p>Bảng phân loại chi tiết theo phương pháp điều chế và ứng dụng.</p>
+    <h2>2. Nhóm Tơ (Fibers)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tên Polime</th>
+                <th>Phương trình phản ứng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>9. Tơ thiên nhiên</strong><br>(Bông, Len, Tơ tằm)</td>
+                <td>Có nguồn gốc tự nhiên (Cellulose, Protein), không có phương trình điều chế tổng hợp.</td>
+            </tr>
+            <tr>
+                <td><strong>10. Tơ nilon-6,6</strong><br>Trùng ngưng</td>
+                <td class="equation">$$nH_2N[CH_2]_6NH_2 + nHOOC[CH_2]_4COOH \xrightarrow{t^\circ, p} (-NH[CH_2]_6NHCO[CH_2]_4CO-)_n + 2nH_2O$$</td>
+            </tr>
+            <tr>
+                <td><strong>11. Tơ nilon-6 (Capron)</strong></td>
+                <td class="equation">
+                    <span class="note">Cách 1: Trùng ngưng axit \(\epsilon\)-aminocaproic:</span>
+                    $$nH_2N[CH_2]_5COOH \xrightarrow{t^\circ} (-NH[CH_2]_5CO-)_n + nH_2O$$
+                    <hr>
+                    <span class="note">Cách 2: Trùng hợp Caprolactam:</span>
+                    $$n(CH_2)_5CONH \xrightarrow{t^\circ, xt} (-NH[CH_2]_5CO-)_n$$
+                </td>
+            </tr>
+            <tr>
+                <td><strong>12. Tơ nilon-7 (Enan)</strong><br>Trùng ngưng</td>
+                <td class="equation">$$nH_2N[CH_2]_6COOH \xrightarrow{t^\circ} (-NH[CH_2]_6CO-)_n + nH_2O$$</td>
+            </tr>
+            <tr>
+                <td><strong>13. Tơ Lapsan</strong><br>Polieste</td>
+                <td class="equation">$$nHOOC-C_6H_4-COOH + nHO-CH_2-CH_2-OH \xrightarrow{t^\circ} (-CO-C_6H_4-COO-CH_2-CH_2-O-)_n + 2nH_2O$$</td>
+            </tr>
+            <tr>
+                <td><strong>14. Tơ Nitron (Olon)</strong><br>Trùng hợp Vinyl xianua</td>
+                <td class="equation">$$nCH_2=CH-CN \xrightarrow{t^\circ, p, xt} (-CH_2-CH(CN)-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>15. Tơ Clorin</strong><br>Clo hóa PVC</td>
+                <td class="equation">$$C_{2n}H_{3n}Cl_n + xCl_2 \xrightarrow{as} C_{2n}H_{3n-x}Cl_{n+x} + xHCl$$</td>
+            </tr>
+            <tr>
+                <td><strong>16. Tơ Vinylon</strong><br>Thủy phân PVA</td>
+                <td class="equation">$$(-CH_2-CH(OOCCH_3)-)_n + nNaOH \xrightarrow{t^\circ} (-CH_2-CH(OH)-)_n + nCH_3COONa$$</td>
+            </tr>
+            <tr>
+                <td><strong>17. Tơ Visco</strong></td>
+                <td>Tơ bán tổng hợp. Hòa tan Cellulose trong \(NaOH\) và \(CS_2\) rồi phun vào axit (viết dưới dạng sơ đồ).</td>
+            </tr>
+            <tr>
+                <td><strong>18. Tơ Axetat</strong><br>Tơ bán tổng hợp</td>
+                <td class="equation">$$[C_6H_7O_2(OH)_3]_n + 3n(CH_3CO)_2O \rightarrow [C_6H_7O_2(OOCCH_3)_3]_n + 3nCH_3COOH$$</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <h3>I. Nhựa (Plastics) - Phản ứng Trùng Hợp</h3>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên Polymer</th>
-                        <th>Ký hiệu</th>
-                        <th>Monomer</th>
-                        <th>Công thức Mắt xích</th>
-                        <th>Đặc điểm / Ứng dụng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>Polyetilen</td><td>PE</td><td>Etilen</td><td class="chem">(-CH<sub>2</sub>-CH<sub>2</sub>-)<sub>n</sub></td><td>Túi ni lông, màng bọc.</td></tr>
-                    <tr><td>2</td><td>Polipropilen</td><td>PP</td><td>Propilen</td><td class="chem">(-CH<sub>2</sub>-CH(CH<sub>3</sub>)-)<sub>n</sub></td><td>Hộp thực phẩm, bao bì.</td></tr>
-                    <tr><td>3</td><td>Polistiren</td><td>PS</td><td>Stiren</td><td class="chem">(-CH<sub>2</sub>-CH(C<sub>6</sub>H<sub>5</sub>)-)<sub>n</sub></td><td>Hộp xốp, thước kẻ.</td></tr>
-                    <tr><td>4</td><td>Poli(vinyl clorua)</td><td>PVC</td><td>Vinyl clorua</td><td class="chem">(-CH<sub>2</sub>-CH(Cl)-)<sub>n</sub></td><td>Ống nước, vỏ dây điện.</td></tr>
-                    <tr><td>5</td><td>Poli(vinyl axetat)</td><td>PVAc</td><td>Vinyl axetat</td><td class="chem">(-CH<sub>2</sub>-CH(OOCCH<sub>3</sub>)-)<sub>n</sub></td><td>Keo dán gỗ, sơn, nhũ tương.</td></tr>
-                    <tr><td>6</td><td>Poli(vinyl ancol)</td><td>PVAL</td><td>(Thủy phân PVAc)</td><td class="chem">(-CH<sub>2</sub>-CH(OH)-)<sub>n</sub></td><td>Keo hồ, tan trong nước nóng.</td></tr>
-                    <tr><td>7</td><td>Poli(metyl metacrylat)</td><td>PMMA</td><td>Metyl metacrylat</td><td class="chem">(-CH<sub>2</sub>-C(CH<sub>3</sub>)(COOCH<sub>3</sub>)-)<sub>n</sub></td><td>Thủy tinh hữu cơ, kính quang học.</td></tr>
-                    <tr><td>8</td><td>Poli(tetrafloetilen)</td><td>PTFE</td><td>Tetrafloetilen</td><td class="chem">(-CF<sub>2</sub>-CF<sub>2</sub>-)<sub>n</sub></td><td>Teflon (chống dính, chịu nhiệt).</td></tr>
-                    <tr><td>9</td><td>Poli(vinylidene clorua)</td><td>PVDC</td><td>Vinylidene clorua</td><td class="chem">(-CH<sub>2</sub>-CCl<sub>2</sub>-)<sub>n</sub></td><td>Màng bọc thực phẩm cao cấp (Saran).</td></tr>
-                    <tr><td>10</td><td>Poliacrylonitrin</td><td>PAN</td><td>Acrylonitrin</td><td class="chem">(-CH<sub>2</sub>-CH(CN)-)<sub>n</sub></td><td>Tơ Nitron (len nhân tạo).</td></tr>
-                </tbody>
-            </table>
-        </div>
+    <h2>3. Nhóm Cao su (Rubber)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tên Polime</th>
+                <th>Phương trình phản ứng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>19. Cao su Buna</strong><br>Trùng hợp Buta-1,3-đien</td>
+                <td class="equation">$$nCH_2=CH-CH=CH_2 \xrightarrow{Na, t^\circ} (-CH_2-CH=CH-CH_2-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>20. Cao su Buna-N</strong><br>Đồng trùng hợp</td>
+                <td class="equation">$$nCH_2=CH-CH=CH_2 + nCH_2=CH-CN \xrightarrow{t^\circ, p, xt} (-CH_2-CH=CH-CH_2-CH_2-CH(CN)-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>21. Cao su Buna-S</strong><br>Đồng trùng hợp</td>
+                <td class="equation">$$nCH_2=CH-CH=CH_2 + nCH_2=CH-C_6H_5 \xrightarrow{t^\circ, p, xt} (-CH_2-CH=CH-CH_2-CH_2-CH(C_6H_5)-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>22. Cao su Isopren</strong><br>Trùng hợp Isopren</td>
+                <td class="equation">$$nCH_2=C(CH_3)-CH=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-C(CH_3)=CH-CH_2-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>23. Cao su Cloropren</strong></td>
+                <td class="equation">$$nCH_2=C(Cl)-CH=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-C(Cl)=CH-CH_2-)_n$$</td>
+            </tr>
+            <tr>
+                <td><strong>24. Cao su lưu hóa</strong></td>
+                <td>Đun nóng cao su với lưu huỳnh (\(S\)) tạo cầu nối \(-S-S-\) mạng không gian.</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <h3>II. Cao su (Elastomers)</h3>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên Polymer</th>
-                        <th>Monomer</th>
-                        <th>Công thức Mắt xích</th>
-                        <th>Ghi chú</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>11</td><td>Polibuta-1,3-dien (Buna)</td><td>Buta-1,3-dien</td><td class="chem">(-CH<sub>2</sub>-CH=CH-CH<sub>2</sub>-)<sub>n</sub></td><td>Cao su tổng hợp đầu tiên.</td></tr>
-                    <tr><td>12</td><td>Poliisopren (Cao su TN)</td><td>Isopren</td><td class="chem">(-CH<sub>2</sub>-C(CH<sub>3</sub>)=CH-CH<sub>2</sub>-)<sub>n</sub></td><td>Cao su thiên nhiên (cấu trúc cis).</td></tr>
-                    <tr><td>13</td><td>Policloropren (Neoprene)</td><td>2-clorobuta-1,3-dien</td><td class="chem">(-CH<sub>2</sub>-C(Cl)=CH-CH<sub>2</sub>-)<sub>n</sub></td><td>Bền với dầu mỡ, làm gioăng.</td></tr>
-                    <tr><td>14</td><td>Cao su Buna-S</td><td>Butadien + Stiren</td><td>(Đồng trùng hợp)</td><td>Độ bền mòn cao, lốp xe.</td></tr>
-                    <tr><td>15</td><td>Cao su Buna-N</td><td>Butadien + Acrylonitrin</td><td>(Đồng trùng hợp)</td><td>Chịu dầu tốt.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h3>III. Tơ sợi & Nhựa Kỹ thuật (Trùng ngưng)</h3>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Tên Polymer</th>
-                        <th>Loại</th>
-                        <th>Thành phần Monomer</th>
-                        <th>Đặc điểm / Ứng dụng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>16</td><td>Nilon-6 (Capron)</td><td>Poliamit</td><td>Axit &epsilon;-aminocaproic</td><td>Dai, bền, dệt vải lưới.</td></tr>
-                    <tr><td>17</td><td>Nilon-7 (Enang)</td><td>Poliamit</td><td>Axit &omega;-aminoenantoic</td><td>Tương tự Nilon-6.</td></tr>
-                    <tr><td>18</td><td>Nilon-6,6</td><td>Poliamit</td><td>Hexametylen điamin + Axit Ađipic</td><td>Loại tơ phổ biến nhất.</td></tr>
-                    <tr><td>19</td><td>Nilon-11</td><td>Poliamit</td><td>Axit &omega;-aminoundecanoic</td><td>Sợi bền, ống dẫn nhiên liệu.</td></tr>
-                    <tr><td>20</td><td>Tơ Lapsan (PET)</td><td>Polieste</td><td>Etylen glicol + Axit Terephtalic</td><td>Vải may mặc, chai nhựa.</td></tr>
-                    <tr><td>21</td><td>Poli(butylen terephtalat)</td><td>Polieste</td><td>Butylen glicol + Axit Terephtalic</td><td>Nhựa kỹ thuật PBT (cách điện).</td></tr>
-                    <tr><td>22</td><td>Kevlar</td><td>Poliamit thơm</td><td>(Phức tạp)</td><td>Áo chống đạn, siêu bền.</td></tr>
-                    <tr><td>23</td><td>Policacbonat (PC)</td><td>Polieste</td><td>Bisphenol A + Phosgene</td><td>Nhựa siêu cứng, kính chống đạn.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h3>IV. Keo dán & Nhựa nhiệt rắn</h3>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr><th>STT</th><th>Tên</th><th>Thành phần</th><th>Ứng dụng</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>24</td><td>Nhựa Phenol-Fomanđehit (PPF)</td><td>Phenol + HCHO</td><td>Vỏ ổ điện (Bakelit), vecni.</td></tr>
-                    <tr><td>25</td><td>Nhựa Urê-Fomanđehit</td><td>Urê + HCHO</td><td>Keo dán gỗ.</td></tr>
-                    <tr><td>26</td><td>Nhựa Melamin</td><td>Melamin + HCHO</td><td>Bát đĩa giả sứ ("phíp"), bền nhiệt.</td></tr>
-                    <tr><td>27</td><td>Keo Epoxy</td><td>Bisphenol A + Epichlorohydrin</td><td>Keo dán kim loại, gốm sứ siêu bền.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h3>V. Thiên nhiên & Bán tổng hợp</h3>
-        <div class="table-responsive">
-            <table>
-                <thead><tr><th>STT</th><th>Tên</th><th>Nguồn gốc</th><th>Ghi chú</th></tr></thead>
-                <tbody>
-                    <tr><td>28</td><td>Tinh bột</td><td>Lương thực</td><td>Amilozơ & Amilopectin.</td></tr>
-                    <tr><td>29</td><td>Xenlulozơ</td><td>Gỗ, bông</td><td>Polime mạch thẳng.</td></tr>
-                    <tr><td>30</td><td>Tơ Visco</td><td>Bán tổng hợp</td><td>Xenlulozơ + NaOH + CS<sub>2</sub>.</td></tr>
-                    <tr><td>31</td><td>Tơ Axetat</td><td>Bán tổng hợp</td><td>Xenlulozơ + Anhiđrit axetic.</td></tr>
-                    <tr><td>32</td><td>Chitin / Chitosan</td><td>Vỏ tôm cua</td><td>Chỉ khâu y tế tự tiêu, màng sinh học.</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <hr>
-
-    <div id="part2">
-        <h2>PHẦN 2: PHÂN TÍCH & GIẢI CHI TIẾT ĐỀ THI HSG HÓA 12 (HẢI DƯƠNG - MÃ 201)</h2>
-        
-        <div class="exam-intro">
-            <strong>Giới thiệu:</strong> Đề thi gồm 24 câu trắc nghiệm và phần tự luận, kiểm tra kiến thức tổng hợp từ vô cơ đến hữu cơ, đặc biệt nhấn mạnh vào phân tích số liệu thực nghiệm và ứng dụng thực tiễn.
-            <br><br>
-            <strong>Lưu ý:</strong> Điều kiện chuẩn (đkc) là 25°C, 1 bar (V = 24,79 L/mol).
-        </div>
-
-        <h3>I. Trắc Nghiệm (Phân tích chi tiết các câu tiêu biểu)</h3>
-
-        <div class="question-block">
-            <div class="q-title">Câu 1: Tổng hợp Ammonia (Haber-Bosch)</div>
-            <div class="q-analysis">
-                Phản ứng tỏa nhiệt (ΔH < 0) và giảm số mol khí. Theo Le Châtelier:
-                <ul>
-                    <li>Giảm nhiệt độ &rarr; Cân bằng chuyển dịch theo chiều thuận.</li>
-                    <li>Tăng áp suất &rarr; Cân bằng chuyển dịch theo chiều thuận.</li>
-                </ul>
-            </div>
-            <div class="q-answer">Đáp án đúng: B (Tăng áp suất và giảm nhiệt độ)</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 2: Thuyết Brønsted-Lowry</div>
-            <div class="q-analysis">
-                Base là chất nhận proton (H<sup>+</sup>).<br>
-                CO<sub>3</sub><sup>2-</sup> nhận H<sup>+</sup> từ nước &rarr; Base.<br>
-                OH<sup>-</sup> nhận H<sup>+</sup> từ HCO<sub>3</sub><sup>-</sup> (chiều nghịch) &rarr; Base.
-            </div>
-            <div class="q-answer">Đáp án đúng: C (CO<sub>3</sub><sup>2-</sup> và OH<sup>-</sup>)</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 3: Xử lý khí SO<sub>2</sub></div>
-            <div class="q-analysis">
-                SO<sub>2</sub> là khí độc, acidic oxide. Cần dùng dung dịch kiềm rẻ tiền để hấp thụ.<br>
-                Ca(OH)<sub>2</sub> (nước vôi) tạo kết tủa CaSO<sub>3</sub> giữ khí lại.
-            </div>
-            <div class="q-answer">Đáp án đúng: B (Nước vôi)</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 7: Alkane trong dầu tẩy trang</div>
-            <div class="q-analysis">
-                Nguyên tắc "Like dissolves like". Alkane không phân cực, hòa tan tốt các chất không phân cực như phấn trang điểm, dầu nhờn trên da.
-            </div>
-            <div class="q-answer">Đáp án đúng: C</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 12: Benzyl Salicylate</div>
-            <div class="q-analysis">
-                Sản phẩm phản ứng: HOC<sub>6</sub>H<sub>4</sub>COOCH<sub>2</sub>C<sub>6</sub>H<sub>5</sub>.<br>
-                Đây là một ester. Phổ hồng ngoại (IR) của nhóm C=O ester nằm trong vùng 1750-1715 cm<sup>-1</sup>.
-            </div>
-            <div class="q-answer">Đáp án đúng: B</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 17: Cấu trúc Geranial</div>
-            <div class="q-analysis">
-                Từ % khối lượng &rarr; CTPT: C<sub>10</sub>H<sub>16</sub>O. Độ bất bão hòa k = 3.<br>
-                Có 1 nhóm C=O (1 &pi;). Suy ra còn 2 liên kết đôi C=C (2 &pi;). Tổng &pi; = 3.<br>
-                Số liên kết &sigma; = (10 + 16 + 1) - 1 = 26.
-            </div>
-            <div class="q-answer">Đáp án đúng: A (26 &sigma;, 3 &pi;)</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 21: CFC (Freon-12)</div>
-            <div class="q-analysis">
-                Kiểm tra % khối lượng: CCl<sub>2</sub>F<sub>2</sub> (M=121).<br>
-                %F = (38/121)*100% &approx; 31.40%.<br>
-                %Cl = (71/121)*100% &approx; 58.68%.<br>
-                Khớp hoàn toàn với dữ kiện đề bài.
-            </div>
-            <div class="q-answer">Đáp án đúng: B</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">Câu 23: Xăng E5 và chỉ số Octane</div>
-            <div class="q-analysis">
-                Phát biểu (b) đúng: Octane = 0.05*109 + 0.95*92 = 92.85.<br>
-                Phát biểu (e) đúng: Reforming biến alkane mạch thẳng thành mạch nhánh/vòng để tăng chỉ số octane.
-            </div>
-            <div class="q-answer">Đáp án đúng: B (2 phát biểu đúng)</div>
-        </div>
-
-        <h3>II. Phần Tự Luận: Thí nghiệm Ethylene</h3>
-
-        <div class="question-block">
-            <div class="q-title">a) Ethylene + Nước Bromine</div>
-            <p><strong>Hiện tượng:</strong> Dung dịch Bromine màu nâu đỏ bị nhạt màu dần đến mất màu.</p>
-            <p><strong>Giải thích:</strong> Phản ứng cộng vào liên kết đôi C=C.</p>
-            <div class="reaction-box">CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> &rarr; CH<sub>2</sub>Br-CH<sub>2</sub>Br (không màu)</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">b) Ethylene + KMnO<sub>4</sub> (môi trường thường)</div>
-            <p><strong>Hiện tượng:</strong> Mất màu tím, xuất hiện kết tủa nâu đen (MnO<sub>2</sub>).</p>
-            <div class="reaction-box">3C<sub>2</sub>H<sub>4</sub> + 2KMnO<sub>4</sub> + 4H<sub>2</sub>O &rarr; 3C<sub>2</sub>H<sub>4</sub>(OH)<sub>2</sub> + 2MnO<sub>2</sub>&darr; + 2KOH</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">c) Ethylene + KMnO<sub>4</sub> (môi trường Acid)</div>
-            <p><strong>Yêu cầu:</strong> Tạo dung dịch trong suốt.</p>
-            <p><strong>Giải thích:</strong> Trong môi trường H<sub>2</sub>SO<sub>4</sub>, Mn<sup>+7</sup> bị khử về Mn<sup>+2</sup> (không màu), không tạo tủa MnO<sub>2</sub>.</p>
-            <div class="reaction-box">5C<sub>2</sub>H<sub>4</sub> + 2KMnO<sub>4</sub> + 3H<sub>2</sub>SO<sub>4</sub> &rarr; 5C<sub>2</sub>H<sub>4</sub>(OH)<sub>2</sub> + 2MnSO<sub>4</sub> + K<sub>2</sub>SO<sub>4</sub> + 3H<sub>2</sub>O</div>
-        </div>
-
-        <div class="question-block">
-            <div class="q-title">d) Vai trò bình NaOH</div>
-            <p><strong>Giải thích:</strong> Loại bỏ khí tạp chất acidic oxide (SO<sub>2</sub>, CO<sub>2</sub>) sinh ra trong quá trình đun ethanol với H<sub>2</sub>SO<sub>4</sub> đặc.</p>
-            <div class="reaction-box">SO<sub>2</sub> + 2NaOH &rarr; Na<sub>2</sub>SO<sub>3</sub> + H<sub>2</sub>O</div>
-        </div>
-
-    </div>
+    <h2>4. Keo dán</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tên Polime</th>
+                <th>Phương trình phản ứng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>25. Poli ure-fomanđehit</strong><br>Trùng ngưng</td>
+                <td class="equation">$$n(NH_2)_2CO + nHCHO \xrightarrow{t^\circ, xt} (-NH-CO-NH-CH_2-)_n + nH_2O$$</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>

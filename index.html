@@ -2,237 +2,184 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tổng Hợp Phương Trình Điều Chế Polime</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Polime Watch</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
+        /* Tối ưu cho màn hình đồng hồ/nhỏ */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            background-color: #000000; /* Tiết kiệm pin OLED */
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-            color: #333;
+            padding: 8px;
+            font-size: 16px; /* Chữ to dễ đọc */
         }
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+
         h1 {
+            font-size: 1.2em;
             text-align: center;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+            color: #00e5ff;
+            margin: 10px 0 20px 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
         }
+
         h2 {
-            color: #e74c3c;
-            margin-top: 30px;
-            border-left: 5px solid #e74c3c;
-            padding-left: 10px;
-            background-color: #fff0f0;
+            font-size: 1em;
+            color: #ff4081; /* Màu nổi bật phân biệt nhóm */
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ff4081;
+            padding-left: 8px;
+            background: #1a1a1a;
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+
+        /* Thiết kế dạng thẻ thay vì bảng */
+        .card {
+            background-color: #121212;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #2980b9;
-            color: white;
-            width: 30%;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .equation {
+
+        .name {
+            font-weight: bold;
+            color: #ffea00;
             font-size: 1.1em;
-            overflow-x: auto;
-        }
-        .note {
-            font-style: italic;
-            font-size: 0.9em;
-            color: #666;
             margin-bottom: 5px;
             display: block;
+        }
+
+        .desc {
+            font-size: 0.85em;
+            color: #bbb;
+            margin-bottom: 8px;
+            display: block;
+            font-style: italic;
+        }
+
+        /* Công thức hóa học */
+        .eq {
+            overflow-x: auto; /* Cho phép cuộn ngang nếu công thức dài */
+            padding-top: 5px;
+            border-top: 1px dashed #444;
+            white-space: nowrap; /* Giữ công thức trên 1 dòng để dễ nhìn cấu trúc */
+        }
+        
+        /* Tùy chỉnh thanh cuộn cho đẹp trên mobile */
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #555; 
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>TỔNG HỢP PHƯƠNG TRÌNH ĐIỀU CHẾ POLIME</h1>
-    <p><em>Lưu ý: Trong phản ứng, các điều kiện xúc tác, nhiệt độ, áp suất viết tắt là \(xt, t^\circ, p\).</em></p>
+    <h1>Hóa Polime</h1>
 
-    <h2>1. Nhóm Chất dẻo (Plastics)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Tên Polime</th>
-                <th>Phương trình phản ứng</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>1. Polietilen (PE)</strong><br>Trùng hợp Etilen</td>
-                <td class="equation">$$nCH_2=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-CH_2-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>2. Polipropilen (PP)</strong><br>Trùng hợp Propilen</td>
-                <td class="equation">$$nCH_2=CH-CH_3 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad CH_3 \end{pmatrix}_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>3. Polistiren (PS)</strong><br>Trùng hợp Stiren</td>
-                <td class="equation">$$nCH_2=CH-C_6H_5 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad C_6H_5 \end{pmatrix}_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>4. Polivinyl clorua (PVC)</strong><br>Trùng hợp Vinyl clorua</td>
-                <td class="equation">$$nCH_2=CH-Cl \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad Cl \end{pmatrix}_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>5. Polivinyl axetat (PVA)</strong><br>Trùng hợp Vinyl axetat</td>
-                <td class="equation">$$nCH_3COOCH=CH_2 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-CH- \\ \quad | \\ \quad OOCCH_3 \end{pmatrix}_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>6. Polimetyl metacrylat</strong><br>(Thủy tinh hữu cơ - Plexiglas)</td>
-                <td class="equation">$$nCH_2=C(CH_3)COOCH_3 \xrightarrow{t^\circ, p, xt} \begin{pmatrix} -CH_2-C(CH_3)- \\ \quad | \\ \quad COOCH_3 \end{pmatrix}_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>7. Poli phenol-fomanđehit (PPF)</strong><br>Nhựa Novolac/Rezol</td>
-                <td class="equation">
-                    <span class="note">Trùng ngưng Phenol & Fomanđehit (tạo mắt xích cơ bản):</span>
-                    $$nC_6H_5OH + nHCHO \xrightarrow{H^+, t^\circ} (-(OH)C_6H_3-CH_2-)_n + nH_2O$$
-                </td>
-            </tr>
-            <tr>
-                <td><strong>8. Teflon</strong><br>Politetrafloetilen</td>
-                <td class="equation">$$nCF_2=CF_2 \xrightarrow{t^\circ, p, xt} (-CF_2-CF_2-)_n$$</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2>1. Chất Dẻo</h2>
 
-    <h2>2. Nhóm Tơ (Fibers)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Tên Polime</th>
-                <th>Phương trình phản ứng</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>9. Tơ thiên nhiên</strong><br>(Bông, Len, Tơ tằm)</td>
-                <td>Có nguồn gốc tự nhiên (Cellulose, Protein), không có phương trình điều chế tổng hợp.</td>
-            </tr>
-            <tr>
-                <td><strong>10. Tơ nilon-6,6</strong><br>Trùng ngưng</td>
-                <td class="equation">$$nH_2N[CH_2]_6NH_2 + nHOOC[CH_2]_4COOH \xrightarrow{t^\circ, p} (-NH[CH_2]_6NHCO[CH_2]_4CO-)_n + 2nH_2O$$</td>
-            </tr>
-            <tr>
-                <td><strong>11. Tơ nilon-6 (Capron)</strong></td>
-                <td class="equation">
-                    <span class="note">Cách 1: Trùng ngưng axit \(\epsilon\)-aminocaproic:</span>
-                    $$nH_2N[CH_2]_5COOH \xrightarrow{t^\circ} (-NH[CH_2]_5CO-)_n + nH_2O$$
-                    <hr>
-                    <span class="note">Cách 2: Trùng hợp Caprolactam:</span>
-                    $$n(CH_2)_5CONH \xrightarrow{t^\circ, xt} (-NH[CH_2]_5CO-)_n$$
-                </td>
-            </tr>
-            <tr>
-                <td><strong>12. Tơ nilon-7 (Enan)</strong><br>Trùng ngưng</td>
-                <td class="equation">$$nH_2N[CH_2]_6COOH \xrightarrow{t^\circ} (-NH[CH_2]_6CO-)_n + nH_2O$$</td>
-            </tr>
-            <tr>
-                <td><strong>13. Tơ Lapsan</strong><br>Polieste</td>
-                <td class="equation">$$nHOOC-C_6H_4-COOH + nHO-CH_2-CH_2-OH \xrightarrow{t^\circ} (-CO-C_6H_4-COO-CH_2-CH_2-O-)_n + 2nH_2O$$</td>
-            </tr>
-            <tr>
-                <td><strong>14. Tơ Nitron (Olon)</strong><br>Trùng hợp Vinyl xianua</td>
-                <td class="equation">$$nCH_2=CH-CN \xrightarrow{t^\circ, p, xt} (-CH_2-CH(CN)-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>15. Tơ Clorin</strong><br>Clo hóa PVC</td>
-                <td class="equation">$$C_{2n}H_{3n}Cl_n + xCl_2 \xrightarrow{as} C_{2n}H_{3n-x}Cl_{n+x} + xHCl$$</td>
-            </tr>
-            <tr>
-                <td><strong>16. Tơ Vinylon</strong><br>Thủy phân PVA</td>
-                <td class="equation">$$(-CH_2-CH(OOCCH_3)-)_n + nNaOH \xrightarrow{t^\circ} (-CH_2-CH(OH)-)_n + nCH_3COONa$$</td>
-            </tr>
-            <tr>
-                <td><strong>17. Tơ Visco</strong></td>
-                <td>Tơ bán tổng hợp. Hòa tan Cellulose trong \(NaOH\) và \(CS_2\) rồi phun vào axit (viết dưới dạng sơ đồ).</td>
-            </tr>
-            <tr>
-                <td><strong>18. Tơ Axetat</strong><br>Tơ bán tổng hợp</td>
-                <td class="equation">$$[C_6H_7O_2(OH)_3]_n + 3n(CH_3CO)_2O \rightarrow [C_6H_7O_2(OOCCH_3)_3]_n + 3nCH_3COOH$$</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <span class="name">PE (Polietilen)</span>
+        <div class="eq">$$nCH_2=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-CH_2-)_n$$</div>
+    </div>
 
-    <h2>3. Nhóm Cao su (Rubber)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Tên Polime</th>
-                <th>Phương trình phản ứng</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>19. Cao su Buna</strong><br>Trùng hợp Buta-1,3-đien</td>
-                <td class="equation">$$nCH_2=CH-CH=CH_2 \xrightarrow{Na, t^\circ} (-CH_2-CH=CH-CH_2-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>20. Cao su Buna-N</strong><br>Đồng trùng hợp</td>
-                <td class="equation">$$nCH_2=CH-CH=CH_2 + nCH_2=CH-CN \xrightarrow{t^\circ, p, xt} (-CH_2-CH=CH-CH_2-CH_2-CH(CN)-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>21. Cao su Buna-S</strong><br>Đồng trùng hợp</td>
-                <td class="equation">$$nCH_2=CH-CH=CH_2 + nCH_2=CH-C_6H_5 \xrightarrow{t^\circ, p, xt} (-CH_2-CH=CH-CH_2-CH_2-CH(C_6H_5)-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>22. Cao su Isopren</strong><br>Trùng hợp Isopren</td>
-                <td class="equation">$$nCH_2=C(CH_3)-CH=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-C(CH_3)=CH-CH_2-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>23. Cao su Cloropren</strong></td>
-                <td class="equation">$$nCH_2=C(Cl)-CH=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-C(Cl)=CH-CH_2-)_n$$</td>
-            </tr>
-            <tr>
-                <td><strong>24. Cao su lưu hóa</strong></td>
-                <td>Đun nóng cao su với lưu huỳnh (\(S\)) tạo cầu nối \(-S-S-\) mạng không gian.</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <span class="name">PVC</span>
+        <div class="eq">$$nCH_2=CH(Cl) \xrightarrow{t^\circ, p, xt} (-CH_2-CH(Cl)-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">PS (Polistiren)</span>
+        <div class="eq">$$nCH_2=CH(C_6H_5) \rightarrow (-CH_2-CH(C_6H_5)-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">PVA (Polivinyl axetat)</span>
+        <div class="eq">$$nCH_3COOCH=CH_2 \rightarrow (-CH_2-CH(OOCCH_3)-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Thủy tinh hữu cơ</span>
+        <div class="eq">$$nCH_2=C(CH_3)COOCH_3 \rightarrow PMM$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">PPF (Nhựa)</span>
+        <span class="desc">Trùng ngưng Phenol + HCHO</span>
+        <div class="eq">$$nC_6H_5OH + nHCHO \xrightarrow{H^+} \text{Novolac} + nH_2O$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Teflon</span>
+        <div class="eq">$$nCF_2=CF_2 \rightarrow (-CF_2-CF_2-)_n$$</div>
+    </div>
+
+    <h2>2. Tơ (Sợi)</h2>
+
+    <div class="card">
+        <span class="name">Nilon-6,6</span>
+        <span class="desc">Hexa + Ađipic</span>
+        <div class="eq">$$nH_2N[CH_2]_6NH_2 + nHOOC[CH_2]_4COOH \rightarrow \text{Nilon-6,6}$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Nilon-6</span>
+        <span class="desc">Từ Caprolactam</span>
+        <div class="eq">$$n(CH_2)_5CONH \xrightarrow{t^\circ} (-NH[CH_2]_5CO-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Nilon-7 (Enan)</span>
+        <div class="eq">$$nH_2N[CH_2]_6COOH \rightarrow (-NH[CH_2]_6CO-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Lapsan</span>
+        <div class="eq">$$nAxit + nAncol \rightarrow (-CO-C_6H_4-COO-CH_2CH_2-O-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Nitron (Olon)</span>
+        <div class="eq">$$nCH_2=CH-CN \rightarrow (-CH_2-CH(CN)-)_n$$</div>
+    </div>
+
+    <h2>3. Cao su</h2>
+
+    <div class="card">
+        <span class="name">Buna</span>
+        <div class="eq">$$nC_4H_6 \xrightarrow{Na} (-CH_2-CH=CH-CH_2-)_n$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Buna-S</span>
+        <span class="desc">Buna + Stiren</span>
+        <div class="eq">$$nC_4H_6 + nC_8H_8 \xrightarrow{xt} \text{Buna-S}$$</div>
+    </div>
+
+    <div class="card">
+        <span class="name">Isopren</span>
+        <div class="eq">$$nC_5H_8 \rightarrow (-CH_2-C(CH_3)=CH-CH_2-)_n$$</div>
+    </div>
 
     <h2>4. Keo dán</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Tên Polime</th>
-                <th>Phương trình phản ứng</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>25. Poli ure-fomanđehit</strong><br>Trùng ngưng</td>
-                <td class="equation">$$n(NH_2)_2CO + nHCHO \xrightarrow{t^\circ, xt} (-NH-CO-NH-CH_2-)_n + nH_2O$$</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="card">
+        <span class="name">Ure-Fomanđehit</span>
+        <div class="eq">$$n(NH_2)_2CO + nHCHO \rightarrow \text{Keo}$$</div>
+    </div>
+
+    <div style="text-align: center; color: #555; font-size: 0.8em; margin-top: 20px;">
+        --- Hết ---
+    </div>
 
 </body>
 </html>

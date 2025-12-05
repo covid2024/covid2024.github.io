@@ -3,183 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Polime Watch</title>
+    <title>25 Polime Full</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        /* Tối ưu cho màn hình đồng hồ/nhỏ */
         body {
-            background-color: #000000; /* Tiết kiệm pin OLED */
+            background-color: #000000;
             color: #ffffff;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            padding: 8px;
-            font-size: 16px; /* Chữ to dễ đọc */
+            padding: 5px;
+            font-size: 14px;
         }
-
         h1 {
-            font-size: 1.2em;
-            text-align: center;
             color: #00e5ff;
-            margin: 10px 0 20px 0;
-            text-transform: uppercase;
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
             border-bottom: 1px solid #333;
-            padding-bottom: 5px;
+            padding-bottom: 10px;
         }
-
-        h2 {
-            font-size: 1em;
-            color: #ff4081; /* Màu nổi bật phân biệt nhóm */
-            margin-top: 25px;
+        .group-title {
+            color: #ff4081;
+            font-weight: bold;
+            margin-top: 20px;
             margin-bottom: 10px;
             border-left: 3px solid #ff4081;
-            padding-left: 8px;
-            background: #1a1a1a;
-            padding-top: 5px;
-            padding-bottom: 5px;
+            padding-left: 10px;
+            text-transform: uppercase;
+            font-size: 1em;
         }
-
-        /* Thiết kế dạng thẻ thay vì bảng */
         .card {
-            background-color: #121212;
+            background-color: #111;
             border: 1px solid #333;
             border-radius: 8px;
             padding: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
-
         .name {
+            color: #ffd700;
             font-weight: bold;
-            color: #ffea00;
-            font-size: 1.1em;
+            display: block;
             margin-bottom: 5px;
-            display: block;
+            font-size: 1.1em;
         }
-
         .desc {
-            font-size: 0.85em;
-            color: #bbb;
-            margin-bottom: 8px;
-            display: block;
+            color: #aaa;
+            font-size: 0.9em;
             font-style: italic;
+            display: block;
+            margin-bottom: 5px;
         }
-
-        /* Công thức hóa học */
-        .eq {
-            overflow-x: auto; /* Cho phép cuộn ngang nếu công thức dài */
-            padding-top: 5px;
-            border-top: 1px dashed #444;
-            white-space: nowrap; /* Giữ công thức trên 1 dòng để dễ nhìn cấu trúc */
-        }
-        
-        /* Tùy chỉnh thanh cuộn cho đẹp trên mobile */
-        ::-webkit-scrollbar {
-            height: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #555; 
-            border-radius: 2px;
+        /* Style cho MathJax để căn giữa và gọn */
+        .mjx-chtml {
+            text-align: center !important;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>Hóa Polime</h1>
+    <h1>25 POLIME ĐẦY ĐỦ</h1>
 
-    <h2>1. Chất Dẻo</h2>
-
-    <div class="card">
-        <span class="name">PE (Polietilen)</span>
-        <div class="eq">$$nCH_2=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-CH_2-)_n$$</div>
-    </div>
+    <div class="group-title">1. CHẤT DẺO</div>
 
     <div class="card">
-        <span class="name">PVC</span>
-        <div class="eq">$$nCH_2=CH(Cl) \xrightarrow{t^\circ, p, xt} (-CH_2-CH(Cl)-)_n$$</div>
+        <span class="name">1. Polietilen (PE)</span>
+        <span class="desc">Trùng hợp Etilen</span>
+        $$ nCH_2=CH_2 \xrightarrow{t^\circ, p, xt} (-CH_2-CH_2-)_n $$
     </div>
 
     <div class="card">
-        <span class="name">PS (Polistiren)</span>
-        <div class="eq">$$nCH_2=CH(C_6H_5) \rightarrow (-CH_2-CH(C_6H_5)-)_n$$</div>
+        <span class="name">2. Polipropilen (PP)</span>
+        <span class="desc">Trùng hợp Propilen</span>
+        $$ \begin{gathered} nCH_2=CH-CH_3 \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH(CH_3)-)_n \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">PVA (Polivinyl axetat)</span>
-        <div class="eq">$$nCH_3COOCH=CH_2 \rightarrow (-CH_2-CH(OOCCH_3)-)_n$$</div>
+        <span class="name">3. Polistiren (PS)</span>
+        <span class="desc">Trùng hợp Stiren</span>
+        $$ \begin{gathered} nCH_2=CH-C_6H_5 \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH(C_6H_5)-)_n \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Thủy tinh hữu cơ</span>
-        <div class="eq">$$nCH_2=C(CH_3)COOCH_3 \rightarrow PMM$$</div>
+        <span class="name">4. PVC</span>
+        <span class="desc">Trùng hợp Vinyl clorua</span>
+        $$ \begin{gathered} nCH_2=CH-Cl \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH(Cl)-)_n \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">PPF (Nhựa)</span>
-        <span class="desc">Trùng ngưng Phenol + HCHO</span>
-        <div class="eq">$$nC_6H_5OH + nHCHO \xrightarrow{H^+} \text{Novolac} + nH_2O$$</div>
+        <span class="name">5. PVA</span>
+        <span class="desc">Trùng hợp Vinyl axetat</span>
+        $$ \begin{gathered} nCH_3COOCH=CH_2 \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH(OOCCH_3)-)_n \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Teflon</span>
-        <div class="eq">$$nCF_2=CF_2 \rightarrow (-CF_2-CF_2-)_n$$</div>
-    </div>
-
-    <h2>2. Tơ (Sợi)</h2>
-
-    <div class="card">
-        <span class="name">Nilon-6,6</span>
-        <span class="desc">Hexa + Ađipic</span>
-        <div class="eq">$$nH_2N[CH_2]_6NH_2 + nHOOC[CH_2]_4COOH \rightarrow \text{Nilon-6,6}$$</div>
+        <span class="name">6. Thủy tinh hữu cơ</span>
+        <span class="desc">Trùng hợp Metyl metacrylat</span>
+        $$ \begin{gathered} nCH_2=C(CH_3)COOCH_3 \\ \downarrow t^\circ, p, xt \\ \begin{pmatrix} -CH_2-C(CH_3)- \\ | \\ COOCH_3 \end{pmatrix}_n \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Nilon-6</span>
-        <span class="desc">Từ Caprolactam</span>
-        <div class="eq">$$n(CH_2)_5CONH \xrightarrow{t^\circ} (-NH[CH_2]_5CO-)_n$$</div>
+        <span class="name">7. Nhựa PPF</span>
+        <span class="desc">Phenol + Fomanđehit</span>
+        $$ \begin{gathered} nC_6H_5OH + nHCHO \\ \downarrow H^+, t^\circ \\ (-(OH)C_6H_3-CH_2-)_n \\ + nH_2O \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Nilon-7 (Enan)</span>
-        <div class="eq">$$nH_2N[CH_2]_6COOH \rightarrow (-NH[CH_2]_6CO-)_n$$</div>
+        <span class="name">8. Teflon</span>
+        <span class="desc">Politetrafloetilen</span>
+        $$ nCF_2=CF_2 \xrightarrow{t^\circ, p, xt} (-CF_2-CF_2-)_n $$
+    </div>
+
+    <div class="group-title">2. TƠ (SỢI)</div>
+
+    <div class="card">
+        <span class="name">9. Tơ thiên nhiên</span>
+        <span class="desc">Bông, Len, Tơ tằm. (Có sẵn trong tự nhiên, không điều chế).</span>
     </div>
 
     <div class="card">
-        <span class="name">Lapsan</span>
-        <div class="eq">$$nAxit + nAncol \rightarrow (-CO-C_6H_4-COO-CH_2CH_2-O-)_n$$</div>
+        <span class="name">10. Tơ nilon-6,6</span>
+        <span class="desc">Trùng ngưng Hexa & Ađipic</span>
+        $$ \begin{gathered} nH_2N-(CH_2)_6-NH_2 \\ + \: nHOOC-(CH_2)_4-COOH \\ \downarrow t^\circ, p \\ (-NH(CH_2)_6NHCO(CH_2)_4CO-)_n \\ + \: 2nH_2O \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Nitron (Olon)</span>
-        <div class="eq">$$nCH_2=CH-CN \rightarrow (-CH_2-CH(CN)-)_n$$</div>
-    </div>
-
-    <h2>3. Cao su</h2>
-
-    <div class="card">
-        <span class="name">Buna</span>
-        <div class="eq">$$nC_4H_6 \xrightarrow{Na} (-CH_2-CH=CH-CH_2-)_n$$</div>
+        <span class="name">11. Tơ nilon-6 (C1)</span>
+        <span class="desc">Trùng ngưng axit &epsilon;-aminocaproic</span>
+        $$ \begin{gathered} nH_2N-(CH_2)_5-COOH \\ \downarrow t^\circ \\ (-NH-(CH_2)_5-CO-)_n \\ + \: nH_2O \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Buna-S</span>
-        <span class="desc">Buna + Stiren</span>
-        <div class="eq">$$nC_4H_6 + nC_8H_8 \xrightarrow{xt} \text{Buna-S}$$</div>
+        <span class="name">11. Tơ nilon-6 (C2)</span>
+        <span class="desc">Trùng hợp Caprolactam</span>
+        $$ \begin{gathered} n(CH_2)_5CONH \text{ (vòng)} \\ \downarrow t^\circ, xt \\ (-NH-(CH_2)_5-CO-)_n \end{gathered} $$
     </div>
 
     <div class="card">
-        <span class="name">Isopren</span>
-        <div class="eq">$$nC_5H_8 \rightarrow (-CH_2-C(CH_3)=CH-CH_2-)_n$$</div>
+        <span class="name">12. Tơ nilon-7 (Enan)</span>
+        <span class="desc">Trùng ngưng axit &omega;-aminoenantoic</span>
+        $$ \begin{gathered} nH_2N-(CH_2)_6-COOH \\ \downarrow t^\circ \\ (-NH-(CH_2)_6-CO-)_n \\ + \: nH_2O \end{gathered} $$
     </div>
 
-    <h2>4. Keo dán</h2>
     <div class="card">
-        <span class="name">Ure-Fomanđehit</span>
-        <div class="eq">$$n(NH_2)_2CO + nHCHO \rightarrow \text{Keo}$$</div>
+        <span class="name">13. Tơ Lapsan</span>
+        <span class="desc">Axit terephtalic + Etylen glicol</span>
+        $$ \begin{gathered} nHOOC-C_6H_4-COOH \\ + \: nHO-CH_2-CH_2-OH \\ \downarrow t^\circ \\ (-CO-C_6H_4-COO-CH_2CH_2-O-)_n \\ + \: 2nH_2O \end{gathered} $$
     </div>
 
-    <div style="text-align: center; color: #555; font-size: 0.8em; margin-top: 20px;">
-        --- Hết ---
+    <div class="card">
+        <span class="name">14. Tơ Nitron (Olon)</span>
+        <span class="desc">Trùng hợp Vinyl xianua</span>
+        $$ \begin{gathered} nCH_2=CH-CN \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH(CN)-)_n \end{gathered} $$
     </div>
+
+    <div class="card">
+        <span class="name">15. Tơ Clorin</span>
+        <span class="desc">Clo hóa PVC</span>
+        $$ \begin{gathered} C_{2n}H_{3n}Cl_n + xCl_2 \\ \downarrow as \\ C_{2n}H_{3n-x}Cl_{n+x} + xHCl \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">16. Tơ Vinylon</span>
+        <span class="desc">Thủy phân PVA</span>
+        $$ \begin{gathered} (-CH_2-CH(OOCCH_3)-)_n \\ + \: nNaOH \\ \downarrow t^\circ \\ (-CH_2-CH(OH)-)_n \\ + \: nCH_3COONa \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">17. Tơ Visco</span>
+        <span class="desc">Hòa tan Cellulose trong NaOH + CS2 rồi phun vào axit (Sơ đồ).</span>
+    </div>
+
+    <div class="card">
+        <span class="name">18. Tơ Axetat</span>
+        <span class="desc">Cellulose + Anhiđrit axetic</span>
+        $$ \begin{gathered} [C_6H_7O_2(OH)_3]_n \\ + \: 3n(CH_3CO)_2O \\ \downarrow \\ [C_6H_7O_2(OOCCH_3)_3]_n \\ + \: 3nCH_3COOH \end{gathered} $$
+    </div>
+
+    <div class="group-title">3. CAO SU</div>
+
+    <div class="card">
+        <span class="name">19. Cao su Buna</span>
+        <span class="desc">Trùng hợp Buta-1,3-đien</span>
+        $$ \begin{gathered} nCH_2=CH-CH=CH_2 \\ \downarrow Na, t^\circ \\ (-CH_2-CH=CH-CH_2-)_n \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">20. Cao su Buna-N</span>
+        <span class="desc">Đồng trùng hợp với Nitron</span>
+        $$ \begin{gathered} nCH_2=CH-CH=CH_2 \\ + \: nCH_2=CH-CN \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH=CH-CH_2- \\ CH_2-CH(CN)-)_n \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">21. Cao su Buna-S</span>
+        <span class="desc">Đồng trùng hợp với Stiren</span>
+        $$ \begin{gathered} nCH_2=CH-CH=CH_2 \\ + \: nCH_2=CH-C_6H_5 \\ \downarrow t^\circ, p, xt \\ (-CH_2-CH=CH-CH_2- \\ CH_2-CH(C_6H_5)-)_n \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">22. Cao su Isopren</span>
+        <span class="desc">Trùng hợp Isopren</span>
+        $$ \begin{gathered} nCH_2=C(CH_3)-CH=CH_2 \\ \downarrow t^\circ, p, xt \\ (-CH_2-C(CH_3)=CH-CH_2-)_n \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">23. Cao su Cloropren</span>
+        <span class="desc">Trùng hợp Cloropren</span>
+        $$ \begin{gathered} nCH_2=C(Cl)-CH=CH_2 \\ \downarrow t^\circ, p, xt \\ (-CH_2-C(Cl)=CH-CH_2-)_n \end{gathered} $$
+    </div>
+
+    <div class="card">
+        <span class="name">24. Cao su lưu hóa</span>
+        <span class="desc">Đun nóng cao su với S tạo cầu nối -S-S- (Cấu trúc mạng lưới).</span>
+    </div>
+
+    <div class="group-title">4. KEO DÁN</div>
+
+    <div class="card">
+        <span class="name">25. Poli Ure-Fomanđehit</span>
+        <span class="desc">Trùng ngưng Ure & Fomanđehit</span>
+        $$ \begin{gathered} n(NH_2)_2CO + nHCHO \\ \downarrow t^\circ, xt \\ (-NH-CO-NH-CH_2-)_n \\ + \: nH_2O \end{gathered} $$
+    </div>
+
+    <div style="text-align: center; color: #555; padding-bottom: 20px;">--- HẾT ---</div>
 
 </body>
 </html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSG Tin Học 2025 - Polymarket Clone</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar glass">
+        <div class="logo">
+            <span class="logo-icon">🏆</span>
+            <h1>HSG Tin Học 2025 Market</h1>
+        </div>
+        <div class="user-info">
+            <div class="balance-badge">
+                <span class="label">Số dư:</span>
+                <span class="value text-success">$<span id="balance-display">1000.00</span></span>
+            </div>
+            <div class="balance-badge portfolio-badge">
+                <span class="label">Portfolio (Ước tính):</span>
+                <span class="value text-primary">$<span id="portfolio-display">0.00</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <h2>Thị trường dự đoán HSG Thành Phố (Môn Tin Học)</h2>
+                <p>Mua bán cổ phần (shares) của các thí sinh. Nếu thí sinh đạt giải tương ứng, mỗi cổ phần được hoàn lại <strong>$1.00</strong>.</p>
+            </div>
+            <button class="btn btn-primary btn-icon" onclick="openAddCandidateModal()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Thêm Thí Sinh
+            </button>
+        </header>
+
+        <div class="market-tabs">
+            <button class="tab active" data-market="top1" onclick="switchMarket('top1')">Dự đoán Giải Nhất</button>
+            <button class="tab" data-market="top2" onclick="switchMarket('top2')">Dự đoán Giải Nhì</button>
+            <button class="tab" data-market="top3" onclick="switchMarket('top3')">Dự đoán Giải Ba</button>
+        </div>
+
+        <div class="market-stats glass">
+            <div class="stat-item">
+                <span class="stat-label">Tổng Volume (Cổ phần)</span>
+                <span class="stat-value" id="market-volume">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Tính thanh khoản (Thuật toán)</span>
+                <span class="stat-value text-primary">LMSR (b=200)</span>
+            </div>
+        </div>
+
+        <div class="candidates-grid" id="candidates-grid">
+            <!-- Rendered by JS -->
+        </div>
+
+        <div class="portfolio-section glass">
+            <div class="portfolio-header">
+                <h2>Cổ phần của bạn</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="portfolio-table">
+                    <thead>
+                        <tr>
+                            <th>Thí Sinh</th>
+                            <th>Thị Trường</th>
+                            <th>Số lượng (Shares)</th>
+                            <th>Giá mua TB</th>
+                            <th>Giá trị hiện tại</th>
+                            <th>Lãi/Lỗ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="portfolio-body">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+                <div id="portfolio-empty" class="empty-state">
+                    Bạn chưa có cổ phần nào. Hãy giao dịch ở trên để bắt đầu!
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Trade Modal -->
+    <div class="modal-overlay" id="trade-modal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h2 id="trade-modal-title">Giao dịch</h2>
+                <button class="btn-close" onclick="closeTradeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="odds-display glass-dark">
+                    <div class="odds-col">
+                        <span class="odds-label">Giá 1 Share (Tỷ lệ cược)</span>
+                        <span class="odds-value text-success" id="trade-odds">0%</span>
+                    </div>
+                </div>
+                
+                <div class="trade-actions">
+                    <button class="btn btn-outline active" id="btn-buy" onclick="setTradeType('buy')">Mua (Buy Yes)</button>
+                    <button class="btn btn-outline" id="btn-sell" onclick="setTradeType('sell')">Bán</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Số lượng Shares</label>
+                    <div class="input-group">
+                        <input type="number" id="trade-amount" class="input-glass" value="10" min="1" oninput="updateTradeCost()">
+                        <span class="input-suffix">Shares</span>
+                    </div>
+                    <div class="owned-shares text-muted" id="trade-owned-shares">Bạn đang sở hữu: 0 Shares</div>
+                </div>
+                
+                <div class="trade-summary glass-dark">
+                    <div class="summary-row">
+                        <span>Chi phí ước tính:</span>
+                        <span id="trade-cost" class="font-bold text-lg">$2.50</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Giá thực thi trung bình:</span>
+                        <span id="trade-avg-price" class="text-muted">$0.25</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-success btn-full" id="btn-submit-trade" onclick="executeTrade()">Xác nhận Mua</button>
+                <div id="trade-error" class="text-danger mt-sm text-center" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Candidate Modal -->
+    <div class="modal-overlay" id="add-candidate-modal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h2>Thêm Thí Sinh Mới</h2>
+                <button class="btn-close" onclick="closeAddCandidateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-md">Thí sinh mới sẽ được thêm vào tất cả các thị trường dự đoán cùng môn thi.</p>
+                <div class="form-group">
+                    <label>Họ và Tên</label>
+                    <input type="text" id="new-candidate-name" class="input-glass" placeholder="VD: Nguyễn Văn A..." onkeyup="if(event.key === 'Enter') addCandidate()">
+                </div>
+                <button class="btn btn-primary btn-full" onclick="addCandidate()">Thêm vào danh sách</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass">
+        <span id="toast-message">Giao dịch thành công!</span>
+    </div>
+
+    <script src="js/lmsr.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

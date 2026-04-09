@@ -3,39 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vật Lý 12 - Smartwatch</title>
+    <title>VL12 - Safe Edge</title>
     <style>
         body {
             background-color: #000000;
-            color: #E0E0E0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 16px; /* Chữ to dễ đọc */
+            color: #A0A0A0; /* Chữ xám nhạt, không dùng trắng tinh để chống chói */
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 14px;
             margin: 0;
-            padding: 8px;
+            /* Lề siêu to để chống lẹm viền đồng hồ (nhất là mặt tròn) */
+            padding: 30px 15px 40px 15px; 
             line-height: 1.4;
+            box-sizing: border-box;
         }
-        h1 { font-size: 18px; color: #FF5722; text-align: center; border-bottom: 2px solid #FF5722; padding-bottom: 5px; margin-top: 5px;}
-        h2 { font-size: 16px; color: #4CAF50; margin: 15px 0 5px 0; padding-bottom: 2px; border-bottom: 1px dashed #4CAF50;}
-        h3 { font-size: 15px; color: #03A9F4; margin: 8px 0 2px 0;}
+        h1 { font-size: 15px; color: #6E6E6E; text-align: center; border-bottom: 1px solid #222; padding-bottom: 5px; margin-top: 0; text-transform: uppercase;}
+        h2 { font-size: 14px; color: #8F9E8B; /* Xanh rêu nhạt */ margin: 15px 0 5px 0; padding-bottom: 2px; border-bottom: 1px solid #1A1A1A;}
+        h3 { font-size: 13px; color: #7B8D93; /* Xanh dương trầm */ margin: 8px 0 2px 0;}
         .f { 
-            color: #FFEB3B; /* Công thức màu vàng nổi bật */
-            font-weight: bold; 
+            color: #C2A878; /* Vàng cát trầm, dễ đọc nhưng không gắt */
+            font-weight: 500; 
             font-family: monospace; 
-            font-size: 15px;
+            font-size: 14px;
             display: block;
-            margin: 3px 0 8px 0;
+            margin: 6px 0;
+            padding: 5px;
+            background: #0A0A0A; /* Khối nền tối giúp tách biệt công thức */
+            border-radius: 6px;
+            text-align: center; /* Căn giữa để né viền màn hình cong */
             word-wrap: break-word;
         }
-        p { margin: 2px 0; font-size: 14px;}
-        ul { margin: 2px 0; padding-left: 20px; font-size: 14px;}
+        p { margin: 2px 0;}
+        ul { margin: 2px 0; padding-left: 15px;}
         li { margin-bottom: 4px;}
         sup, sub { font-size: 10px; line-height: 0; }
-        .box { background: #1A1A1A; border-left: 3px solid #E91E63; padding: 5px; margin: 8px 0; }
+        .box { background: #0A0A0A; border: 1px solid #222; padding: 10px; margin: 10px 0; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-    <h1>VẬT LÝ 12</h1>
+    <h1>Vật Lý 12</h1>
 
     <h2>1. TỪ TRƯỜNG</h2>
     <h3>Cảm ứng từ</h3>
@@ -49,19 +55,19 @@
     <h3>Lực từ lên dây</h3>
     <span class="f">F = B.I.l.sin(&alpha;)</span>
     <p>&alpha;=0&deg; &rarr; F=0</p>
-    <p>&alpha;=90&deg; &rarr; F<sub>max</sub>=BIl</p>
+    <p>&alpha;=90&deg; &rarr; Max = BIl</p>
 
     <h3>Lực Lo-ren-xơ</h3>
     <span class="f">F = |q|.v.B.sin(&alpha;)</span>
 
     <h3>Quy tắc</h3>
     <ul>
-        <li>Nắm tay phải: C.Từ</li>
-        <li>Bàn tay trái: Lực từ</li>
+        <li>Tay phải: C.Từ</li>
+        <li>Tay trái: Lực từ</li>
     </ul>
 
     <h2>2. CẢM ỨNG ĐIỆN TỪ</h2>
-    <h3>Từ thông (&alpha; với pháp tuyến)</h3>
+    <h3>Từ thông (&alpha; / pháp tuyến)</h3>
     <span class="f">&Phi; = N.B.S.cos(&alpha;)</span>
 
     <h3>Suất điện động</h3>
@@ -73,40 +79,39 @@
     <span class="f">E<sub>0</sub> = &omega;.&Phi;<sub>0</sub></span>
 
     <h3>Len-xơ</h3>
-    <p>Tăng &rarr; chống tăng, Giảm &rarr; chống giảm.</p>
+    <p>Tăng &rarr; chống tăng.</p>
+    <p>Giảm &rarr; chống giảm.</p>
 
     <h2>3. SÓNG ĐIỆN TỪ</h2>
     <ul>
         <li>Truyền trong chân không.</li>
         <li>Là sóng ngang.</li>
-        <li>E &perp; B nhưng <b>CÙNG PHA</b>.</li>
+        <li>E &perp; B nhưng <b>Cùng Pha</b>.</li>
     </ul>
     <span class="f">c = 3.10<sup>8</sup> m/s</span>
-    <span class="f">T = 1/f ; f = 1/T</span>
+    <span class="f">T = 1/f ; &lambda; = c/f</span>
 
     <h2>4. MÁY BIẾN ÁP</h2>
     <span class="f">U<sub>1</sub>/U<sub>2</sub> = N<sub>1</sub>/N<sub>2</sub></span>
 
     <h2>5. HẠT NHÂN</h2>
-    <p><sup>A</sup><sub>Z</sub>X (A: số khối, Z: proton)</p>
+    <p><sup>A</sup><sub>Z</sub>X (A: khối, Z: p)</p>
     <span class="f">N = A - Z (neutron)</span>
     <p>Đồng vị: Cùng Z, khác A.</p>
 
     <h3>Độ hụt khối</h3>
-    <span class="f">&Delta;m = Z.m<sub>p</sub> + N.m<sub>n</sub> - m<sub>X</sub></span>
+    <span class="f">&Delta;m = Zm<sub>p</sub> + Nm<sub>n</sub> - m<sub>X</sub></span>
 
     <h3>Năng lượng LK</h3>
     <span class="f">W<sub>lk</sub> = &Delta;m . 931,5</span>
     <span class="f">&epsilon; = W<sub>lk</sub> / A</span>
-    <p>(&epsilon; lớn &rarr; càng bền)</p>
+    <p>(&epsilon; lớn &rarr; hạt bền)</p>
 
-    <h3>Bảo toàn & Năng lượng</h3>
-    <p>Bảo toàn A và Z.</p>
-    <span class="f">Q = (m<sub>trước</sub> - m<sub>sau</sub>).931,5</span>
+    <h3>Năng lượng P.Ứng</h3>
+    <span class="f">Q = (m<sub>t</sub> - m<sub>s</sub>).931,5</span>
 
     <h2>6. PHÓNG XẠ</h2>
     <span class="f">N = N<sub>0</sub>.2<sup>-t/T</sup></span>
-    <span class="f">m = m<sub>0</sub>.2<sup>-t/T</sup></span>
     <span class="f">&Delta;m = m<sub>0</sub> - m</span>
     <span class="f">&lambda; = ln2 / T</span>
 
@@ -121,19 +126,14 @@
     <span class="f">E = P.t</span>
 
     <h2>10. THẾ NĂNG ĐIỆN</h2>
-    <span class="f">W<sub>t</sub> = k.q<sub>1</sub>.q<sub>2</sub> / r</span>
+    <span class="f">W<sub>t</sub> = k.q<sub>1</sub>q<sub>2</sub> / r</span>
 
     <h2>11. HẰNG SỐ</h2>
-    <p>c = 3.10<sup>8</sup> m/s</p>
-    <p>k = 9.10<sup>9</sup></p>
-    <p>e = 1,6.10<sup>-19</sup> C</p>
-    <p>1u = 931,5 MeV/c<sup>2</sup></p>
+    <span class="f">c = 3.10<sup>8</sup> m/s</span>
+    <span class="f">e = 1,6.10<sup>-19</sup> C</span>
+    <span class="f">1u = 931,5 MeV</span>
 
-    <h2>12. ĐỔI ĐƠN VỊ</h2>
-    <p>1cm<sup>2</sup> = 10<sup>-4</sup> m<sup>2</sup></p>
-    <p>1 năm = 3,15.10<sup>7</sup> s</p>
-
-    <h2>15. 7 CT CHỐNG LIỆT</h2>
+    <h2>15. CHỐNG LIỆT</h2>
     <div class="box">
         <span class="f">1. F = BIl.sin&alpha;</span>
         <span class="f">2. &Phi; = NBS.cos&alpha;</span>
@@ -144,6 +144,6 @@
         <span class="f">7. N = N<sub>0</sub>.2<sup>-t/T</sup></span>
     </div>
 
-    <br><br>
+    <p style="text-align: center; margin-top: 20px; font-size: 12px; color: #444;">-- HẾT --</p>
 </body>
 </html>

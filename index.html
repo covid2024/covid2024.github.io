@@ -2,225 +2,148 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Full Cheat Sheet Vật Lý 12</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vật Lý 12 - Smartwatch</title>
     <style>
-        @page { size: A4 portrait; margin: 5mm; }
         body {
-            font-family: 'Arial', sans-serif;
-            font-size: 7.5pt; /* Ép nhỏ để nhét đủ full text */
-            line-height: 1.15;
+            background-color: #000000;
+            color: #E0E0E0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px; /* Chữ to dễ đọc */
             margin: 0;
-            background: #fff;
-            color: #000;
+            padding: 8px;
+            line-height: 1.4;
         }
-        .a4-page {
-            width: 100%;
-            column-count: 3;
-            column-gap: 4mm;
-            column-rule: 0.5px solid #ccc;
+        h1 { font-size: 18px; color: #FF5722; text-align: center; border-bottom: 2px solid #FF5722; padding-bottom: 5px; margin-top: 5px;}
+        h2 { font-size: 16px; color: #4CAF50; margin: 15px 0 5px 0; padding-bottom: 2px; border-bottom: 1px dashed #4CAF50;}
+        h3 { font-size: 15px; color: #03A9F4; margin: 8px 0 2px 0;}
+        .f { 
+            color: #FFEB3B; /* Công thức màu vàng nổi bật */
+            font-weight: bold; 
+            font-family: monospace; 
+            font-size: 15px;
+            display: block;
+            margin: 3px 0 8px 0;
+            word-wrap: break-word;
         }
-        h1 {
-            text-align: center; font-size: 11pt; margin: 0 0 5px 0;
-            column-span: all; text-transform: uppercase;
-            border-bottom: 2px solid #000; padding-bottom: 3px;
-        }
-        h2 {
-            font-size: 8.5pt; color: #fff; background: #333;
-            margin: 4px 0 2px 0; padding: 2px; text-align: center;
-            break-after: avoid;
-        }
-        h3 {
-            font-size: 7.5pt; font-weight: bold; text-decoration: underline;
-            margin: 3px 0 1px 0; break-after: avoid;
-        }
-        p { margin: 1px 0; }
-        ul { margin: 1px 0; padding-left: 12px; }
-        li { margin-bottom: 1px; }
-        .formula {
-            font-family: 'Times New Roman', serif; font-weight: bold; font-size: 8.5pt;
-            background: #f4f4f4; border-left: 2px solid #000;
-            padding: 1px 2px; margin: 2px 0; display: inline-block; width: 95%;
-        }
-        .box { border: 1px dashed #666; padding: 2px; margin: 2px 0; }
-        sup, sub { font-size: 6pt; }
+        p { margin: 2px 0; font-size: 14px;}
+        ul { margin: 2px 0; padding-left: 20px; font-size: 14px;}
+        li { margin-bottom: 4px;}
+        sup, sub { font-size: 10px; line-height: 0; }
+        .box { background: #1A1A1A; border-left: 3px solid #E91E63; padding: 5px; margin: 8px 0; }
     </style>
 </head>
 <body>
 
-<div class="a4-page">
-    <h1>BẢNG TỔNG HỢP FULL KIẾN THỨC VẬT LÝ 12</h1>
+    <h1>VẬT LÝ 12</h1>
 
     <h2>1. TỪ TRƯỜNG</h2>
-    <h3>1.1. Cảm ứng từ</h3>
-    <p>Dây thẳng dài:</p>
-    <div class="formula">B = 2.10<sup>-7</sup>.I / r</div>
-    <p>Tâm vòng dây tròn (N vòng):</p>
-    <div class="formula">B = 2&pi;.10<sup>-7</sup>.N.I / R</div>
-    <p>Trong ống dây dài (n = N/l):</p>
-    <div class="formula">B = 4&pi;.10<sup>-7</sup>.n.I</div>
+    <h3>Cảm ứng từ</h3>
+    <p>Dây thẳng:</p>
+    <span class="f">B = 2.10<sup>-7</sup>.I / r</span>
+    <p>Tâm vòng tròn:</p>
+    <span class="f">B = 2&pi;.10<sup>-7</sup>.N.I / R</span>
+    <p>Ống dây (n=N/l):</p>
+    <span class="f">B = 4&pi;.10<sup>-7</sup>.n.I</span>
     
-    <h3>1.2. Lực từ tác dụng lên dây mang dòng</h3>
-    <div class="formula">F = B.I.l.sin&alpha;</div>
-    <p>(&alpha; là góc giữa dây và B). Đặc biệt:</p>
-    <ul>
-        <li>&alpha; = 0&deg; &Rightarrow; F = 0 (song song)</li>
-        <li>&alpha; = 90&deg; &Rightarrow; F<sub>max</sub> = BIl (vuông góc)</li>
-    </ul>
+    <h3>Lực từ lên dây</h3>
+    <span class="f">F = B.I.l.sin(&alpha;)</span>
+    <p>&alpha;=0&deg; &rarr; F=0</p>
+    <p>&alpha;=90&deg; &rarr; F<sub>max</sub>=BIl</p>
 
-    <h3>1.3. Lực Lo-ren-xơ</h3>
-    <div class="formula">F = |q|.v.B.sin&alpha;</div>
-    <p>(&alpha; là góc giữa v và B). Đặc biệt:</p>
-    <ul>
-        <li>v // B &Rightarrow; F = 0</li>
-        <li>v &perp; B &Rightarrow; F<sub>max</sub> = |q|vB</li>
-    </ul>
+    <h3>Lực Lo-ren-xơ</h3>
+    <span class="f">F = |q|.v.B.sin(&alpha;)</span>
 
-    <h3>1.4. Quy tắc cần nhớ</h3>
+    <h3>Quy tắc</h3>
     <ul>
-        <li><b>Nắm tay phải:</b> Chiều đ.sức từ quanh dòng điện.</li>
-        <li><b>Bàn tay trái:</b> Chiều lực từ lên dây dẫn mang dòng.</li>
+        <li>Nắm tay phải: C.Từ</li>
+        <li>Bàn tay trái: Lực từ</li>
     </ul>
 
     <h2>2. CẢM ỨNG ĐIỆN TỪ</h2>
-    <h3>2.1. Từ thông</h3>
-    <div class="formula">&Phi; = N.B.S.cos&alpha;</div>
-    <p><b>Cực quan trọng:</b> &alpha; là góc với PHÁP TUYẾN, không phải mặt phẳng khung.</p>
-    <ul>
-        <li>&alpha; = 0&deg; &Rightarrow; &Phi;<sub>max</sub> = NBS</li>
-        <li>&alpha; = 90&deg; &Rightarrow; &Phi; = 0</li>
-    </ul>
+    <h3>Từ thông (&alpha; với pháp tuyến)</h3>
+    <span class="f">&Phi; = N.B.S.cos(&alpha;)</span>
 
-    <h3>2.2. Suất điện động cảm ứng</h3>
-    <div class="formula">e = |&Delta;&Phi; / &Delta;t|  (tức thời: e = |-d&Phi;/dt|)</div>
+    <h3>Suất điện động</h3>
+    <span class="f">e = |&Delta;&Phi; / &Delta;t|</span>
+    <p>Thanh chuyển động:</p>
+    <span class="f">e = B.l.v</span>
 
-    <h3>2.3. Thanh dẫn chuyển động</h3>
-    <div class="formula">e = B.l.v</div>
+    <h3>Máy phát XC</h3>
+    <span class="f">E<sub>0</sub> = &omega;.&Phi;<sub>0</sub></span>
 
-    <h3>2.4. Máy phát điện xoay chiều</h3>
-    <p>Nếu &Phi; = &Phi;<sub>0</sub>cos(&omega;t) thì e = &omega;&Phi;<sub>0</sub>sin(&omega;t)</p>
-    <div class="formula">E<sub>0</sub> = &omega;&Phi;<sub>0</sub></div>
-
-    <h3>2.5. Định luật Len-xơ</h3>
-    <p>Dòng điện CƯ chống lại nguyên nhân sinh ra nó. <b>Mẹo:</b> Từ thông tăng &rarr; chống tăng, giảm &rarr; chống giảm.</p>
+    <h3>Len-xơ</h3>
+    <p>Tăng &rarr; chống tăng, Giảm &rarr; chống giảm.</p>
 
     <h2>3. SÓNG ĐIỆN TỪ</h2>
-    <h3>3.1. Tính chất</h3>
     <ul>
-        <li>Truyền được trong chân không.</li>
-        <li>Là sóng ngang (E &perp; B &perp; phương truyền).</li>
-        <li>E và B luôn <b>cùng pha</b>.</li>
+        <li>Truyền trong chân không.</li>
+        <li>Là sóng ngang.</li>
+        <li>E &perp; B nhưng <b>CÙNG PHA</b>.</li>
     </ul>
-    <h3>3.2 & 3.3. Vận tốc, Chu kì, Tần số</h3>
-    <div class="formula">c = 3.10<sup>8</sup> m/s</div>
-    <div class="formula">T = 1/f ; f = 1/T</div>
+    <span class="f">c = 3.10<sup>8</sup> m/s</span>
+    <span class="f">T = 1/f ; f = 1/T</span>
 
     <h2>4. MÁY BIẾN ÁP</h2>
-    <div class="formula">U<sub>1</sub>/U<sub>2</sub> = N<sub>1</sub>/N<sub>2</sub> &Rightarrow; N<sub>2</sub> = N<sub>1</sub>(U<sub>2</sub>/U<sub>1</sub>)</div>
+    <span class="f">U<sub>1</sub>/U<sub>2</sub> = N<sub>1</sub>/N<sub>2</sub></span>
 
-    <h2>5. HẠT NHÂN NGUYÊN TỬ</h2>
-    <h3>5.1. Kí hiệu</h3>
-    <p><sup>A</sup><sub>Z</sub>X. N = A - Z. T.hòa: e = p = Z.</p>
-    <h3>5.2. Đồng vị</h3>
-    <p>Cùng Z (proton), khác A (khác neutron).</p>
-    <h3>5.3. Độ hụt khối</h3>
-    <div class="formula">&Delta;m = Z.m<sub>p</sub> + (A-Z).m<sub>n</sub> - m<sub>X</sub></div>
-    <h3>5.4. Năng lượng liên kết</h3>
-    <div class="formula">W<sub>lk</sub> = &Delta;m.c<sup>2</sup> = &Delta;m . 931,5 (MeV)</div>
-    <h3>5.5. Năng lượng liên kết riêng</h3>
-    <div class="formula">&epsilon; = W<sub>lk</sub> / A</div>
-    <p>&epsilon; càng lớn &rarr; hạt nhân càng bền.</p>
-    <h3>5.6. Bảo toàn trong phản ứng</h3>
-    <div class="formula">&Sigma;A<sub>trước</sub> = &Sigma;A<sub>sau</sub> ; &Sigma;Z<sub>trước</sub> = &Sigma;Z<sub>sau</sub></div>
-    <h3>5.7. Năng lượng phản ứng</h3>
-    <div class="formula">Q = (m<sub>trước</sub> - m<sub>sau</sub>) . 931,5 (MeV)</div>
-    <p>Q > 0: Tỏa | Q < 0: Thu</p>
-    <h3>5.8. Bán kính hạt nhân</h3>
-    <div class="formula">R = r<sub>0</sub>.A<sup>1/3</sup> (r<sub>0</sub> = 1,2.10<sup>-15</sup> m)</div>
+    <h2>5. HẠT NHÂN</h2>
+    <p><sup>A</sup><sub>Z</sub>X (A: số khối, Z: proton)</p>
+    <span class="f">N = A - Z (neutron)</span>
+    <p>Đồng vị: Cùng Z, khác A.</p>
+
+    <h3>Độ hụt khối</h3>
+    <span class="f">&Delta;m = Z.m<sub>p</sub> + N.m<sub>n</sub> - m<sub>X</sub></span>
+
+    <h3>Năng lượng LK</h3>
+    <span class="f">W<sub>lk</sub> = &Delta;m . 931,5</span>
+    <span class="f">&epsilon; = W<sub>lk</sub> / A</span>
+    <p>(&epsilon; lớn &rarr; càng bền)</p>
+
+    <h3>Bảo toàn & Năng lượng</h3>
+    <p>Bảo toàn A và Z.</p>
+    <span class="f">Q = (m<sub>trước</sub> - m<sub>sau</sub>).931,5</span>
 
     <h2>6. PHÓNG XẠ</h2>
-    <h3>6.1 & 6.2. Số hạt & Khối lượng còn lại</h3>
-    <div class="formula">N = N<sub>0</sub>.2<sup>-t/T</sup> = N<sub>0</sub>.e<sup>-&lambda;t</sup></div>
-    <div class="formula">m = m<sub>0</sub>.2<sup>-t/T</sup></div>
-    <h3>6.3 & 6.4. Hoạt độ & Hằng số PX</h3>
-    <div class="formula">&lambda; = ln2 / T</div>
-    <div class="formula">H = &lambda;N = H<sub>0</sub>.2<sup>-t/T</sup></div>
-    <h3>6.5. Khối lượng đã phân rã</h3>
-    <div class="formula">&Delta;m = m<sub>0</sub> - m</div>
+    <span class="f">N = N<sub>0</sub>.2<sup>-t/T</sup></span>
+    <span class="f">m = m<sub>0</sub>.2<sup>-t/T</sup></span>
+    <span class="f">&Delta;m = m<sub>0</sub> - m</span>
+    <span class="f">&lambda; = ln2 / T</span>
 
-    <h2>7. NL TỪ KHỐI LƯỢNG</h2>
-    <div class="formula">E = mc<sup>2</sup></div>
-    
-    <h2>8. SỐ HẠT, MOL, KHỐI LƯỢNG</h2>
-    <div class="formula">n = m/M ; N = n.N<sub>A</sub> = (m/M).N<sub>A</sub></div>
+    <h2>7. NL & KHỐI LƯỢNG</h2>
+    <span class="f">E = m.c<sup>2</sup></span>
+
+    <h2>8. SỐ HẠT / MOL</h2>
+    <span class="f">n = m/M</span>
+    <span class="f">N = (m/M).N<sub>A</sub></span>
 
     <h2>9. CÔNG SUẤT</h2>
-    <div class="formula">P = A/t = E/t &Rightarrow; E = P.t</div>
+    <span class="f">E = P.t</span>
 
-    <h2>10. THẾ NĂNG / TƯƠNG TÁC</h2>
-    <div class="formula">W<sub>t</sub> = k.q<sub>1</sub>.q<sub>2</sub> / r</div>
-    <p>Hạt đến gần nhất: 1/2.mv<sup>2</sup> = k.q<sub>1</sub>q<sub>2</sub>/d &Rightarrow; d=...</p>
+    <h2>10. THẾ NĂNG ĐIỆN</h2>
+    <span class="f">W<sub>t</sub> = k.q<sub>1</sub>.q<sub>2</sub> / r</span>
 
-    <h2>11. HẰNG SỐ & GIÁ TRỊ</h2>
-    <h3>11.1. Hằng số Vật lí</h3>
-    <p>c = 3.10<sup>8</sup> m/s ; k = 9.10<sup>9</sup> Nm<sup>2</sup>/C<sup>2</sup></p>
-    <p>e = 1,6.10<sup>-19</sup> C ; 1u = 931,5 MeV/c<sup>2</sup></p>
-    <p>1 MeV = 1,602.10<sup>-13</sup> J ; N<sub>A</sub> = 6,02.10<sup>23</sup></p>
-    <p>r<sub>0</sub> = 1,2.10<sup>-15</sup> m ; g &approx; 9,8 hoặc 10 m/s<sup>2</sup></p>
-    <h3>11.2. Khối lượng (u)</h3>
-    <p>m<sub>p</sub> &approx; 1,00728 ; m<sub>n</sub> &approx; 1,00866 ; m<sub>e</sub> &approx; 0,00055</p>
-    <h3>11.3. Hạt quen thuộc</h3>
-    <p>Alpha: <sup>4</sup><sub>2</sub>He | Proton: <sup>1</sup><sub>1</sub>p | Neutron: <sup>1</sup><sub>0</sub>n</p>
-    <p>e/&beta;<sup>-</sup>: <sup>0</sup><sub>-1</sub>e | &beta;<sup>+</sup>: <sup>0</sup><sub>+1</sub>e | Gamma: &gamma;</p>
+    <h2>11. HẰNG SỐ</h2>
+    <p>c = 3.10<sup>8</sup> m/s</p>
+    <p>k = 9.10<sup>9</sup></p>
+    <p>e = 1,6.10<sup>-19</sup> C</p>
+    <p>1u = 931,5 MeV/c<sup>2</sup></p>
 
     <h2>12. ĐỔI ĐƠN VỊ</h2>
-    <p>DT: 1cm<sup>2</sup> = 10<sup>-4</sup>m<sup>2</sup></p>
-    <p>Dài: 1cm = 10<sup>-2</sup>m ; 1mm = 10<sup>-3</sup>m</p>
-    <p>KL: 1g = 10<sup>-3</sup>kg ; T.Thông: 1 Wb = 1 Tm<sup>2</sup></p>
-    <p>Điện: 1mV = 10<sup>-3</sup>V ; Lực: 1mN = 10<sup>-3</sup>N</p>
-    <p>T.gian: 1 năm = 3,1536.10<sup>7</sup> s</p>
+    <p>1cm<sup>2</sup> = 10<sup>-4</sup> m<sup>2</sup></p>
+    <p>1 năm = 3,15.10<sup>7</sup> s</p>
 
-    <h2>13. GÓC ĐẶC BIỆT</h2>
-    <p>sin0 = 0, cos0 = 1 | sin90 = 1, cos90 = 0</p>
-    <p>sin30 = 1/2, cos30 = &radic;3/2</p>
-    <p>sin45 = cos45 = &radic;2/2</p>
-    <p>sin60 = &radic;3/2, cos60 = 1/2</p>
-
-    <h2>14. DẤU HIỆU NHẬN DẠNG</h2>
-    <ul>
-        <li>"đường sức, dây thẳng, ống dây, lực từ" &rarr; Từ trường</li>
-        <li>"từ thông, e cảm ứng, Len-xơ, khung quay" &rarr; C.Ứng ĐT</li>
-        <li>"chân không, E và B, cùng pha" &rarr; Sóng ĐT</li>
-        <li>"hụt khối, NLLK, chu kì, đồng vị" &rarr; Hạt nhân</li>
-    </ul>
-
-    <h2>15. 7 CÔNG THỨC CHỐNG LIỆT</h2>
+    <h2>15. 7 CT CHỐNG LIỆT</h2>
     <div class="box">
-        1. F = BIl.sin&alpha;<br>
-        2. &Phi; = NBS.cos&alpha;<br>
-        3. e = |&Delta;&Phi;/&Delta;t|<br>
-        4. &Delta;m = Zm<sub>p</sub> + (A-Z)m<sub>n</sub> - m<sub>X</sub><br>
-        5. W<sub>lk</sub> = &Delta;m . 931,5<br>
-        6. N = A - Z<br>
-        7. N = N<sub>0</sub>.2<sup>-t/T</sup>
+        <span class="f">1. F = BIl.sin&alpha;</span>
+        <span class="f">2. &Phi; = NBS.cos&alpha;</span>
+        <span class="f">3. e = |&Delta;&Phi;/&Delta;t|</span>
+        <span class="f">4. &Delta;m = Zm<sub>p</sub>+Nm<sub>n</sub>-m<sub>X</sub></span>
+        <span class="f">5. W<sub>lk</sub> = &Delta;m.931,5</span>
+        <span class="f">6. N = A - Z</span>
+        <span class="f">7. N = N<sub>0</sub>.2<sup>-t/T</sup></span>
     </div>
 
-    <h2>16. LÝ THUYẾT KHÔNG TÍNH</h2>
-    <ul>
-        <li>Dây cùng chiều hút, ngược chiều đẩy.</li>
-        <li>Sóng ĐT là sóng ngang, truyền trong chân không. E &perp; B, E cùng pha B.</li>
-        <li>Đồng vị: cùng p, khác n.</li>
-        <li>Hạt nhân bền &harr; NLLK riêng lớn.</li>
-        <li>DĐ cảm ứng xuất hiện &harr; từ thông biến thiên.</li>
-    </ul>
-
-    <h2>17. BẢN TÓM TẮT SIÊU NGẮN</h2>
-    <div class="box">
-        <b>Từ trường:</b> B=2.10<sup>-7</sup>I/r ; F=BIl.sin&alpha;<br>
-        <b>CƯĐT:</b> &Phi;=NBS.cos&alpha; ; e=|&Delta;&Phi;/&Delta;t| ; E<sub>0</sub>=&omega;&Phi;<sub>0</sub><br>
-        <b>Sóng ĐT:</b> c=3.10<sup>8</sup>; chân không, ngang, E&perp;B, cùng pha<br>
-        <b>Hạt nhân:</b> N=A-Z ; W<sub>lk</sub>=&Delta;m.931,5 ; &epsilon;=W<sub>lk</sub>/A ; Q=(m<sub>t</sub>-m<sub>s</sub>)931,5 ; N=N<sub>0</sub>2<sup>-t/T</sup>
-    </div>
-</div>
-
+    <br><br>
 </body>
 </html>
